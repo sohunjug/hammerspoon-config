@@ -214,15 +214,20 @@ module.start = function()
    end)
 
    -- throw window to space (and move)
-   for n = 0, 9 do
+   for n = 1, 9 do
       local idx = tostring(n)
 
       hs.hotkey.bind({ "ctrl", "alt", "cmd" }, idx, nil, function()
-         spaces.changeToSpace(n)
+         local uuid = hs.screen.mainScreen():spacesUUID()
+         local spaceID = spaces.layout()[uuid][n]
+         spaces.changeToSpace(spaceID, false)
+         -- hs.window.filter.switchedToSpace(idx)
       end)
       -- important: use this with onKeyReleased, not onKeyPressed
       hs.hotkey.bind({ "ctrl", "shift" }, idx, nil, function()
          local win = hs.window.focusedWindow()
+         local uuid = win:screen():spacesUUID()
+         local spaceID = spaces.layout()[uuid][n]
 
          -- if there's no focused window, just move to that space
          if not win then
@@ -231,11 +236,11 @@ module.start = function()
          end
 
          local isFloating = hhtwm.isFloating(win)
-         local success = hhtwm.throwToSpace(win, n)
+         local success = hhtwm.throwToSpace(win, spaceID)
 
          -- if window switched space, then follow it (ctrl + 0..9) and focus
          if success then
-            spaces.changeToSpace(n)
+            spaces.changeToSpace(spaceID)
             -- hs.eventtap.keyStroke({ "ctrl" }, idx)
 
             -- retile and re-highlight window after we switch space

@@ -425,17 +425,9 @@ module.throwToScreenUsingSpaces = function(win, direction)
 end
 
 -- throw window to space, indexed
-module.throwToSpace = function(win, spaceIdx)
+module.throwToSpace = function(win, spaceId)
    if not win then
       log.e "throwToSpace tried to throw nil window"
-      return false
-   end
-
-   local spacesIds = getSpacesIdsTable()
-   local spaceId = spacesIds[spaceIdx]
-
-   if not spaceId then
-      log.e("throwToSpace tried to move to non-existing space", spaceId, hs.inspect(spacesIds))
       return false
    end
 

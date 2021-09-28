@@ -1,6 +1,6 @@
 -- global stuff
 require("console").init()
--- require("overrides").init()
+require("overrides").init()
 
 -- ensure IPC is there
 hs.ipc.cliInstall()
@@ -18,6 +18,9 @@ hs.hints.fontSize = 22
 hs.hints.hintChars = { "A", "S", "D", "F", "J", "K", "L", "Q", "W", "E", "R", "Z", "X", "C" }
 hs.hints.iconAlpha = 0.5
 hs.hints.showTitleThresh = 0
+
+hs.window.filter.allowedWindowRoles = { AXStandardWindow = true, AXDialog = true }
+hs.window.filter.forceRefreshOnSpaceChange = true
 
 -- lower logging level for hotkeys
 require("hs.hotkey").setLogLevel "warning"
