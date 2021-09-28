@@ -36,9 +36,9 @@ module.drawBorder = function()
    end
 
    local alpha = 0.6
-   local borderWidth = 2
+   local borderWidth = 4
    local distance = 6
-   local roundRadius = 12
+   local roundRadius = 15
 
    local isFullScreen = focusedWindow:isFullScreen()
    local frame = focusedWindow:frame()

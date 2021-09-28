@@ -128,10 +128,16 @@ end
 module.windowHints = function()
    -- hs.hints.style = "vimperator"
 
+   -- hs.hints.windowHints(nil, highlightFocus, false)
+
+   -- expose = hs.expose.new(nil, { onlyActiveApplication = false, includeOtherSpaces = false })
+   -- end
+   -- expose:toggleShow()
+
+   hs.window.switcher.nextWindow()
    -- hs.hotkey.alertDuration = 0
    -- hs.hints.showTitleThresh = 0
    -- hs.window.animationDuration = 0
-   hs.hints.windowHints(nil, highlightFocus, false)
    -- hs.hints.windowHints(nil, highlightWindow, true)
    -- hs.hints.windowHints(hs.window.focusedWindow():application():allWindows())
    -- hs.hints.windowHints()

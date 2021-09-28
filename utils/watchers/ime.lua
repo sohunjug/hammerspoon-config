@@ -18,6 +18,7 @@ M.app2Ime = {
    ["/Applications/iTerm.app"] = English(),
    ["/Applications/kitty.app"] = English(),
    ["/Applications/Alfred 4.app"] = English(),
+   ["/Applications/Alacritty.app"] = English(),
    ["/Applications/Xcode.app"] = English(),
    ["/Applications/Xcode-beta.app"] = English(),
    ["/Applications/Google Chrome.app"] = English(),

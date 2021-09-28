@@ -1,6 +1,6 @@
 -- global stuff
 require("console").init()
-require("overrides").init()
+-- require("overrides").init()
 
 -- ensure IPC is there
 hs.ipc.cliInstall()
@@ -9,6 +9,10 @@ hs.ipc.cliInstall()
 hs.window.animationDuration = 0.0
 
 -- hints
+hs.expose.ui.showThumbnails = false
+hs.expose.ui.includeNonVisible = true
+hs.expose.ui.showTitles = true
+hs.expose.ui.fitWindowsInBackground = true
 -- hs.hints.fontName = "FiraCode"
 hs.hints.fontSize = 22
 hs.hints.hintChars = { "A", "S", "D", "F", "J", "K", "L", "Q", "W", "E", "R", "Z", "X", "C" }
@@ -23,8 +27,8 @@ local modules = { "bindings", "controlplane", "watchables", "watchers", "wm" }
 _G.S_HS_CONFIG = {
    apps = {
       terms = { "iTerm2" },
-      nvim = { "kitty" },
-      browsers = { "Google Chrome", "Safari" },
+      nvim = { "Kitty", "Alacritty" },
+      browsers = { "Google Chrome", "Google Chrome Canary", "Safari" },
    },
 
    wm = {
@@ -32,7 +36,7 @@ _G.S_HS_CONFIG = {
          ["Color LCD"] = "monocle",
          ["Built-in Retina Display"] = "monocle",
          ["B2431M"] = "main-left",
-         ["LU28R55"] = { "main-left" },
+         ["LU28R55"] = "main-left",
       },
 
       displayLayouts = {
@@ -69,7 +73,8 @@ end)
 config.controlplane.enabled = { "displays" }
 
 -- watchers
-config.watchers.enabled = { "urlevent", "autoborder", "ime" }
+config.watchers.enabled = { "ime", "autoborder" }
+-- config.watchers.enabled = {}
 
 -- bindings
 config.bindings.enabled = {
@@ -93,7 +98,7 @@ hs.fnutils.each(modules, function(module)
 end)
 
 config.bindings["ask-before-quit"].askBeforeQuitApps = S_HS_CONFIG.apps.browsers
-config.watchers.urlevent.urlPreference = S_HS_CONFIG.apps.browsers
+-- config.watchers.urlevent.urlPreference = S_HS_CONFIG.apps.browsers
 config.bindings.global.apps = S_HS_CONFIG.apps
 -- start/stop modules
 local mods = {}

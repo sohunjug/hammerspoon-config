@@ -60,9 +60,27 @@ module.cycleLayout = function()
    module.setLayout(nextLayout)
 end
 
+module.leftLayout = function()
+   local layout = "main-ratio"
+   hhtwm.cache.ratio = hhtwm.cache.ratio - 0.05
+
+   module.setLayout(layout)
+end
+
+module.rightLayout = function()
+   local layout = "main-ratio"
+   hhtwm.cache.ratio = hhtwm.cache.ratio + 0.05
+
+   module.setLayout(layout)
+end
+
 module.sohunjugLayout = function()
    local layout = "main-left"
 
+   module.setLayout(layout)
+end
+
+module.switcherLayout = function(layout)
    module.setLayout(layout)
 end
 

@@ -578,12 +578,15 @@ module.tile = function()
 
    local currentSpaces = getCurrentSpacesIds()
 
-   local allWindows = hs.window.allWindows()
-   -- local allWindowsFilter = cache.filter:getWindows()
-   -- local allWindowsSpaces = getAllWindowsUsingSpaces()
+   -- local allWindows = hs.window.allWindows()
 
-   -- log.d('allWindows', hs.inspect(allWindows))
-   -- log.d('allWindowsFilter', hs.inspect(allWindowsFilter))
+   -- local allWindowsFilter = cache.filter:getWindows()
+   -- local allWindowsFilter = hs.window.filter.new():getWindows()
+   local allWindows = hs.window.filter.new():getWindows()
+   -- local allWindows = getAllWindowsUsingSpaces()
+
+   -- log.d("allWindows", hs.inspect(allWindows))
+   -- log.d("allWindowsFilter", hs.inspect(allWindowsFilter))
 
    hs.fnutils.each(allWindows or {}, function(win)
       -- we don't care about minimized or fullscreen windows
@@ -740,12 +743,12 @@ module.detectTile = function(win)
    local subrole = win:subrole()
    local title = win:title()
 
-   print "-------"
+   --[[ print "-------"
    print("app,", hs.inspect(app))
    print("role,", hs.inspect(role))
    print("subrole,", hs.inspect(subrole))
    print("title,", hs.inspect(title))
-   print "-------"
+   print "-------" ]]
    if module.filters then
       local foundMatch = hs.fnutils.find(module.filters, function(obj)
          local appMatches = ternary(obj.app ~= nil and app ~= nil, string.match(app, obj.app or ""), true)
@@ -778,6 +781,7 @@ local loadSettings = function()
    -- load from cache
    local jsonTilingCache = hs.settings.get "hhtwm.tilingCache"
    local jsonFloatingCache = hs.settings.get "hhtwm.floatingCache"
+   cache.ratio = hs.settings.get "hhtwm.ratio"
 
    log.d "reading from hs.settings"
    log.d("hhtwm.tilingCache", jsonTilingCache)
@@ -845,10 +849,14 @@ local saveSettings = function()
       -- only save spaces with windows on them
       if #spaceWindows > 0 then
          local tmp = {}
+         local index = {}
 
          for _, window in pairs(spaceWindows) do
             log.d("storing (spaceId, windowId, window)", spaceId, window:id(), window)
-            table.insert(tmp, window:id())
+            if index[window:id()] ~= true then
+               table.insert(tmp, window:id())
+            end
+            index[window:id()] = true
          end
 
          table.insert(tilingCache, {
@@ -869,6 +877,7 @@ local saveSettings = function()
 
    hs.settings.set("hhtwm.tilingCache", jsonTilingCache)
    hs.settings.set("hhtwm.floatingCache", jsonFloatingCache)
+   hs.settings.set("hhtwm.ratio", cache.ratio)
 end
 
 module.start = function()
@@ -888,10 +897,10 @@ module.start = function()
    loadSettings()
 
    -- retile automatically when windows change
-   cache.filter:subscribe({ hs.window.filter.windowsChanged, hs.window.filter.windowMoved }, module.tile)
+   cache.filter:subscribe({ hs.window.filter.windowsChanged }, module.tile)
 
    -- update on screens change
-   cache.screenWatcher = hs.screen.watcher.new(module.tile):start()
+   cache.screenWatcher = hs.screen.watcher.newWithActiveScreen(module.tile):start()
 
    -- tile on start
    module.tile()

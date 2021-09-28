@@ -1,4 +1,4 @@
-local highlightWindow = require("ext.drawing").highlightWindow
+-- local highlightWindow = require("ext.drawing").highlightWindow
 local spaces = require "hs._asm.undocumented.spaces"
 local capitalize = require("ext.utils").capitalize
 local wm = require "utils.wm"
@@ -23,7 +23,7 @@ local move = function(dir)
       hhtwm.swapInDirection(win, dir)
    end
 
-   highlightWindow()
+   -- highlightWindow()
 end
 
 local throw = function(dir)
@@ -35,7 +35,7 @@ local throw = function(dir)
       hhtwm.throwToScreenUsingSpaces(win, dir)
    end
 
-   highlightWindow()
+   -- highlightWindow()
 end
 
 local resize = function(resize)
@@ -44,7 +44,7 @@ local resize = function(resize)
    if hhtwm.isFloating(win) then
       hs.grid["resizeWindow" .. capitalize(resize)](win)
 
-      highlightWindow()
+      -- highlightWindow()
    else
       hhtwm.resizeLayout(resize)
    end
@@ -174,7 +174,7 @@ module.start = function()
          hs.grid.center(win)
       end
 
-      highlightWindow()
+      -- highlightWindow()
    end)
 
    -- [r]eset
@@ -196,7 +196,7 @@ module.start = function()
 
       -- win:centerOnScreen()
       hs.grid.center(win)
-      highlightWindow()
+      -- highlightWindow()
    end)
 
    -- toggle [z]oom window
@@ -210,7 +210,7 @@ module.start = function()
          hhtwm.toggleFloat(win)
       end
 
-      highlightWindow()
+      -- highlightWindow()
    end)
 
    -- throw window to space (and move)
@@ -243,7 +243,7 @@ module.start = function()
                if not isFloating then
                   hhtwm.tile()
                end
-               highlightWindow(win)
+               -- highlightWindow(win)
             end)
          end
       end)
