@@ -570,11 +570,11 @@ module.tile = function()
 
    local currentSpaces = getCurrentSpacesIds()
 
-   -- local allWindows = hs.window.allWindows()
+   local allWindows = hs.window.allWindows()
 
    -- local allWindowsFilter = cache.filter:getWindows()
    -- local allWindowsFilter = hs.window.filter.new():getWindows()
-   local allWindows = hs.window.filter.new():getWindows()
+   -- local allWindows = hs.window.filter.new():getWindows()
    -- local allWindows = getAllWindowsUsingSpaces()
 
    -- log.d("allWindows", hs.inspect(allWindows))

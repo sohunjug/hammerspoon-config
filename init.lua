@@ -19,8 +19,8 @@ hs.hints.hintChars = { "A", "S", "D", "F", "J", "K", "L", "Q", "W", "E", "R", "Z
 hs.hints.iconAlpha = 0.5
 hs.hints.showTitleThresh = 0
 
-hs.window.filter.allowedWindowRoles = { AXStandardWindow = true, AXDialog = true }
-hs.window.filter.forceRefreshOnSpaceChange = true
+-- hs.window.filter.allowedWindowRoles = { AXStandardWindow = true, AXDialog = true }
+-- hs.window.filter.forceRefreshOnSpaceChange = true
 
 -- lower logging level for hotkeys
 require("hs.hotkey").setLogLevel "warning"

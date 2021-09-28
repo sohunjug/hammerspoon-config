@@ -220,7 +220,11 @@ module.start = function()
       hs.hotkey.bind({ "ctrl", "alt", "cmd" }, idx, nil, function()
          local uuid = hs.screen.mainScreen():spacesUUID()
          local spaceID = spaces.layout()[uuid][n]
-         spaces.changeToSpace(spaceID, false)
+         local ID = spaces.activeSpace()
+
+         if ID ~= spaceID and spaceID ~= nil then
+            spaces.changeToSpace(spaceID, false)
+         end
          -- hs.window.filter.switchedToSpace(idx)
       end)
       -- important: use this with onKeyReleased, not onKeyPressed
@@ -229,12 +233,11 @@ module.start = function()
          local uuid = win:screen():spacesUUID()
          local spaceID = spaces.layout()[uuid][n]
 
-         -- if there's no focused window, just move to that space
-         if not win then
-            hs.eventtap.keyStroke({ "ctrl" }, idx)
+         local ID = spaces.activeSpace()
+         print(ID)
+         if ID == spaceID or spaceID == nil then
             return
          end
-
          local isFloating = hhtwm.isFloating(win)
          local success = hhtwm.throwToSpace(win, spaceID)
 

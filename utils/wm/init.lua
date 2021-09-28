@@ -88,6 +88,7 @@ module.start = function(config)
    cache.watcher = hs.watchable.watch("status.connectedScreenIds", screenWatcher)
 
    local filters = {
+      { app = "Alacritty", tile = true },
       { app = "AppCleaner", tile = false },
       { app = "Application Loader", tile = true },
       { app = "Archive Utility", tile = false },
@@ -131,7 +132,7 @@ module.start = function(config)
       { title = "Little Snitch Network Monitor", tile = false },
       { title = "Window", tile = false },
       { title = "MenuBarCover", tile = false },
-      { subrole = "AXUnknown", title = "Window", tile = false },
+      -- { subrole = "AXUnknown", title = "Window", tile = false },
       { title = "Quick Look", tile = false },
       { title = "TeamViewer", tile = true },
    }
