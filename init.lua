@@ -85,11 +85,12 @@ config.watchers.enabled = { "ime", "autoborder" }
 config.bindings.enabled = {
    "ask-before-quit",
    -- "block-hide",
-   "ctrl-esc",
+   -- "ctrl-esc",
    "focus",
+   "grid",
    "global",
    "tiling",
-   "term-ctrl-i",
+   -- "term-ctrl-i",
    -- "vi-input",
    -- "viscosity",
 }

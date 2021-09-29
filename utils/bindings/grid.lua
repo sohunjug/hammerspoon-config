@@ -18,7 +18,7 @@ end
 
 module.start = function()
    local bind = function(key, fn)
-      hs.hotkey.bind({ "ctrl", "shift" }, key, fn, nil, fn)
+      hs.hotkey.bind({ "alt", "shift" }, key, fn, nil, fn)
    end
 
    hs.fnutils.each({
@@ -36,8 +36,8 @@ module.start = function()
       { key = ";", fn = hs.grid.resizeWindowTaller },
       { key = "'", fn = hs.grid.resizeWindowShorter },
 
-      { key = "-", fn = hs.grid.resizeWindowSmaller },
-      { key = "=", fn = hs.grid.resizeWindowBigger },
+      -- { key = "-", fn = hs.grid.resizeWindowSmaller },
+      -- { key = "=", fn = hs.grid.resizeWindowBigger },
 
       { key = "z", fn = hs.grid.maximizeWindow },
       { key = "c", fn = hs.grid.center },
