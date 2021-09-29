@@ -31,8 +31,8 @@ local modules = { "bindings", "controlplane", "watchables", "watchers", "wm" }
 -- global config
 _G.S_HS_CONFIG = {
    apps = {
-      terms = { "iTerm2" },
-      nvim = { "Kitty", "Alacritty" },
+      terms = { "Kitty", "iTerm2", "Termianl", "终端" },
+      nvim = { "Alacritty" },
       browsers = { "Google Chrome", "Google Chrome Canary", "Safari" },
    },
 
@@ -40,15 +40,15 @@ _G.S_HS_CONFIG = {
       defaultDisplayLayouts = {
          ["Color LCD"] = "monocle",
          ["Built-in Retina Display"] = "monocle",
-         ["B2431M"] = "main-left",
-         ["LU28R55"] = "main-left",
+         ["B2431M"] = "main-work",
+         ["LU28R55"] = "main-work",
       },
 
       displayLayouts = {
-         ["Color LCD"] = { "monocle", "main-left" },
-         ["Built-in Retina Display"] = { "monocle", "main-left" },
-         ["B2431M"] = { "main-center", "main-left", "tab-right", "monocle", "gp-vertical" },
-         ["LU28R55"] = { "main-center", "main-left", "tab-right", "monocle", "gp-vertical" },
+         ["Color LCD"] = { "monocle", "main-work" },
+         ["Built-in Retina Display"] = { "monocle", "main-work" },
+         ["B2431M"] = { "main-center", "main-work", "tab-right", "monocle", "gp-vertical" },
+         ["LU28R55"] = { "main-center", "main-work", "tab-right", "monocle", "gp-vertical" },
       },
    },
 
@@ -75,7 +75,7 @@ hs.fnutils.each(modules, function(module)
    config[module] = {}
 end)
 -- controlplane
-config.controlplane.enabled = { "displays" }
+config.controlplane.enabled = {}
 
 -- watchers
 config.watchers.enabled = { "ime", "autoborder" }

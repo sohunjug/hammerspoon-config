@@ -60,20 +60,6 @@ module.cycleLayout = function()
    module.setLayout(nextLayout)
 end
 
-module.leftLayout = function()
-   local layout = "main-ratio"
-   hhtwm.cache.ratio = hhtwm.cache.ratio - 0.05
-
-   module.setLayout(layout)
-end
-
-module.rightLayout = function()
-   local layout = "main-ratio"
-   hhtwm.cache.ratio = hhtwm.cache.ratio + 0.05
-
-   module.setLayout(layout)
-end
-
 module.sohunjugLayout = function()
    local layout = "main-left"
 
@@ -128,9 +114,10 @@ module.start = function(config)
       { app = "iTunes", title = "Song Info", tile = false },
       { app = "App Store", tile = false },
       { app = "Docker Desktop", tile = false },
+      { title = "GVim", tile = true },
       { title = "Little Snitch Configuration", tile = true },
       { title = "Little Snitch Network Monitor", tile = false },
-      { title = "Window", tile = false },
+      -- { title = "Window", tile = false },
       { title = "MenuBarCover", tile = false },
       -- { subrole = "AXUnknown", title = "Window", tile = false },
       { title = "Quick Look", tile = false },
@@ -139,7 +126,7 @@ module.start = function(config)
 
    local isMenubarVisible = hs.screen.primaryScreen():frame().y > 0
 
-   local fullMargin = 12
+   local fullMargin = 10
    local halfMargin = fullMargin / 2
 
    local screenMargin = {

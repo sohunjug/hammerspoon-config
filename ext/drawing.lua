@@ -35,6 +35,15 @@ module.drawBorder = function()
       return
    end
 
+   -- print(hs.inspect(focusedWindow))
+   --[[ print(
+      "draw",
+      focusedWindow:role(),
+      focusedWindow:pid(),
+      focusedWindow:subrole(),
+      -- focusedWindow:title(),
+      require("hhtwm").isFloating(focusedWindow)
+   ) ]]
    local alpha = 0.6
    local borderWidth = 4
    local distance = 6

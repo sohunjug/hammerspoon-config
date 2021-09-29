@@ -35,7 +35,7 @@ return function(hhtwm)
 
    layouts["half-left"] = function(window, windows, screen, index, layoutOptions)
       if #windows == 1 then
-         return layouts["main-center"](window, windows, screen, index, layoutOptions)
+         return layouts["monocle"](window, windows, screen)
       end
 
       local margin = hhtwm.margin or 0
@@ -68,7 +68,7 @@ return function(hhtwm)
 
    layouts["main-right"] = function(window, windows, screen, index, layoutOptions)
       if #windows == 1 then
-         return layouts["main-center"](window, windows, screen, index, layoutOptions)
+         return layouts["monocle"](window, windows, screen)
       end
 
       local margin = hhtwm.margin or 0
@@ -141,7 +141,7 @@ return function(hhtwm)
 
    layouts["tabbed-left"] = function(window, windows, screen, index, layoutOptions)
       if #windows == 1 then
-         return layouts["main-center"](window, windows, screen, index, layoutOptions)
+         return layouts["monocle"](window, windows, screen)
       end
 
       local margin = hhtwm.margin or 0
@@ -170,7 +170,7 @@ return function(hhtwm)
    end
    layouts["tab-right"] = function(window, windows, screen, index, layoutOptions)
       if #windows == 1 then
-         return layouts["main-center"](window, windows, screen, index, layoutOptions)
+         return layouts["monocle"](window, windows, screen)
       end
 
       local margin = hhtwm.margin or 0
@@ -198,7 +198,7 @@ return function(hhtwm)
       return frame
    end
 
-   layouts["main-left"] = function(window, windows, screen, index, _)
+   layouts["main-work"] = function(window, windows, screen, index, layoutOptions)
       if #windows == 1 then
          return layouts["monocle"](window, windows, screen)
       end
@@ -216,73 +216,12 @@ return function(hhtwm)
       if index == 1 then
          frame.x = frame.x + margin / 2
          frame.y = frame.y + margin / 2
-         frame.w = insetFrame.w * 2 / 3 - margin
+         frame.w = insetFrame.w * layoutOptions.mainPaneRatio - margin
          frame.h = insetFrame.h - margin
       else
-         frame.x = frame.x + insetFrame.w * 2 / 3 + margin / 2
+         frame.x = frame.x + insetFrame.w * layoutOptions.mainPaneRatio + margin / 2
          frame.y = frame.y + margin / 2
-         frame.w = insetFrame.w * (1 - 2 / 3) - margin
-         frame.h = insetFrame.h - margin
-      end
-      return frame
-   end
-
-   layouts["main-ratio"] = function(window, windows, screen, index, _)
-      if #windows == 1 then
-         return layouts["monocle"](window, windows, screen)
-      end
-      if hhtwm.cache.ratio == nil then
-         hhtwm.cache.ratio = 0.6
-      end
-
-      local margin = hhtwm.margin or 0
-      local insetFrame = getInsetFrame(screen)
-
-      local frame = {
-         x = insetFrame.x,
-         y = insetFrame.y,
-         w = 0,
-         h = 0,
-      }
-
-      if index == 1 then
-         frame.x = frame.x + margin / 2
-         frame.y = frame.y + margin / 2
-         frame.w = insetFrame.w * hhtwm.cache.ratio - margin
-         frame.h = insetFrame.h - margin
-      else
-         frame.x = frame.x + insetFrame.w * hhtwm.cache.ratio + margin / 2
-         frame.y = frame.y + margin / 2
-         frame.w = insetFrame.w * (1 - hhtwm.cache.ratio) - margin
-         frame.h = insetFrame.h - margin
-      end
-      return frame
-   end
-
-   layouts["main-work"] = function(window, windows, screen, index, _)
-      if #windows == 1 then
-         return layouts["monocle"](window, windows, screen)
-      end
-
-      local margin = hhtwm.margin or 0
-      local insetFrame = getInsetFrame(screen)
-
-      local frame = {
-         x = insetFrame.x,
-         y = insetFrame.y,
-         w = 0,
-         h = 0,
-      }
-
-      if index == 1 then
-         frame.x = frame.x + margin / 2
-         frame.y = frame.y + margin / 2
-         frame.w = insetFrame.w * 3 / 5 - margin
-         frame.h = insetFrame.h - margin
-      else
-         frame.x = frame.x + insetFrame.w * 3 / 5 + margin / 2
-         frame.y = frame.y + margin / 2
-         frame.w = insetFrame.w * (1 - 3 / 5) - margin
+         frame.w = insetFrame.w * (1 - layoutOptions.mainPaneRatio) - margin
          frame.h = insetFrame.h - margin
       end
       return frame

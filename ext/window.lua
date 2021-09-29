@@ -13,7 +13,7 @@ module.forceFocus = function(win)
 
    win:becomeMain()
    win:raise():focus()
-   highlightWindow()
+   -- highlightWindow()
 end
 
 -- cycle application windows
@@ -99,7 +99,7 @@ module.cycleWindows = function(direction, appWindowsOnly, screenWindowsOnly)
    end
 
    -- higlight when done
-   highlightWindow()
+   -- highlightWindow()
 end
 
 local function highlightFocus()

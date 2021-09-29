@@ -1,4 +1,4 @@
--- local highlightWindow = require("ext.drawing").highlightWindow
+local highlightWindow = require("ext.drawing").highlightWindow
 local spaces = require "hs._asm.undocumented.spaces"
 local capitalize = require("ext.utils").capitalize
 local wm = require "utils.wm"
@@ -23,7 +23,7 @@ local move = function(dir)
       hhtwm.swapInDirection(win, dir)
    end
 
-   -- highlightWindow()
+   highlightWindow()
 end
 
 local throw = function(dir)
@@ -35,7 +35,7 @@ local throw = function(dir)
       hhtwm.throwToScreenUsingSpaces(win, dir)
    end
 
-   -- highlightWindow()
+   highlightWindow()
 end
 
 local resize = function(resize)
@@ -44,7 +44,7 @@ local resize = function(resize)
    if hhtwm.isFloating(win) then
       hs.grid["resizeWindow" .. capitalize(resize)](win)
 
-      -- highlightWindow()
+      highlightWindow()
    else
       hhtwm.resizeLayout(resize)
    end
@@ -174,17 +174,30 @@ module.start = function()
          hs.grid.center(win)
       end
 
-      -- highlightWindow()
+      highlightWindow()
    end)
 
    -- [r]eset
    bind("r", hhtwm.reset)
+
+   bind("n", function()
+      spaces.createSpace(hs.window.frontmostWindow():screen():getUUID(), true)
+      -- spaces.createSpace(nil, true)
+      print(
+         spaces.spaceScreenUUID(spaces.currentSpace()),
+         hs.window.frontmostWindow():screen():getUUID(),
+         spaces.mainScreenUUID()
+      )
+      -- spaces.createSpace(spaces.spaceScreenUUID(spaces.currentSpace()), false)
+   end)
 
    -- re[t]ile
    bind("t", hhtwm.tile)
 
    -- [e]qualize
    bind("e", hhtwm.equalizeLayout)
+
+   bind("x", hhtwm.clear)
 
    -- [c]enter window
    bind("c", function()
@@ -196,7 +209,7 @@ module.start = function()
 
       -- win:centerOnScreen()
       hs.grid.center(win)
-      -- highlightWindow()
+      highlightWindow()
    end)
 
    -- toggle [z]oom window
@@ -210,7 +223,7 @@ module.start = function()
          hhtwm.toggleFloat(win)
       end
 
-      -- highlightWindow()
+      highlightWindow()
    end)
 
    -- throw window to space (and move)
@@ -224,6 +237,18 @@ module.start = function()
 
          if ID ~= spaceID and spaceID ~= nil then
             spaces.changeToSpace(spaceID, false)
+         end
+         -- hs.window.filter.switchedToSpace(idx)
+      end)
+
+      hs.hotkey.bind({ "ctrl", "alt", "shift" }, idx, nil, function()
+         local win = hs.window.focusedWindow()
+         local uuid = win:screen():spacesUUID()
+         local spaceID = spaces.layout()[uuid][n]
+         local ID = spaces.activeSpace()
+
+         if ID ~= spaceID and spaceID ~= nil then
+            spaces.removeSpace(spaceID, true)
          end
          -- hs.window.filter.switchedToSpace(idx)
       end)
@@ -251,7 +276,7 @@ module.start = function()
                if not isFloating then
                   hhtwm.tile()
                end
-               -- highlightWindow(win)
+               highlightWindow(win)
             end)
          end
       end)
