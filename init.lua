@@ -9,9 +9,11 @@ hs.ipc.cliInstall()
 hs.window.animationDuration = 0.0
 
 -- hints
-hs.expose.ui.showThumbnails = false
-hs.expose.ui.includeNonVisible = true
+hs.expose.ui.showThumbnails = true
+hs.expose.ui.includeOtherSpaces = false
+hs.expose.ui.includeNonVisible = false
 hs.expose.ui.showTitles = true
+hs.expose.ui.onlyActiveApplication = false
 hs.expose.ui.fitWindowsInBackground = true
 -- hs.hints.fontName = "FiraCode"
 hs.hints.fontSize = 22
@@ -82,7 +84,7 @@ config.watchers.enabled = { "ime", "autoborder" }
 -- bindings
 config.bindings.enabled = {
    "ask-before-quit",
-   "block-hide",
+   -- "block-hide",
    "ctrl-esc",
    "focus",
    "global",

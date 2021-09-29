@@ -892,7 +892,8 @@ module.start = function()
    cache.filter:subscribe({ hs.window.filter.windowsChanged }, module.tile)
 
    -- update on screens change
-   cache.screenWatcher = hs.screen.watcher.newWithActiveScreen(module.tile):start()
+   -- cache.screenWatcher = hs.screen.watcher.newWithActiveScreen(module.tile):start()
+   cache.screenWatcher = hs.screen.watcher.new(module.tile):start()
 
    -- tile on start
    module.tile()

@@ -124,6 +124,8 @@ local function highlightFocus()
    end)
 end
 
+local expose = hs.expose.new()
+
 -- show hints with highlight
 module.windowHints = function()
    -- hs.hints.style = "vimperator"
@@ -132,9 +134,9 @@ module.windowHints = function()
 
    -- expose = hs.expose.new(nil, { onlyActiveApplication = false, includeOtherSpaces = false })
    -- end
-   -- expose:toggleShow()
+   expose:toggleShow()
 
-   hs.window.switcher.nextWindow()
+   -- hs.window.switcher.nextWindow()
    -- hs.hotkey.alertDuration = 0
    -- hs.hints.showTitleThresh = 0
    -- hs.window.animationDuration = 0
