@@ -39,7 +39,7 @@ local getCurrentSpacesIds = function()
    return spaces.query(spaces.masks.currentSpaces)
 end
 
-local getSpaceId = function(win)
+module.getSpaceId = function(win)
    local spaceId
 
    win = win or hs.window.frontmostWindow()
@@ -159,7 +159,7 @@ end
 -- sets layout for space id,
 -- defaults to current windows space
 module.setLayout = function(layout, spaceId)
-   spaceId = spaceId or getSpaceId()
+   spaceId = spaceId or module.getSpaceId()
    if not spaceId then
       return
    end
@@ -182,7 +182,7 @@ end
 -- 3. layout assigned by tilign.displayLayouts
 -- 4. if all else fails - 'monocle'
 module.getLayout = function(spaceId)
-   spaceId = spaceId or getSpaceId()
+   spaceId = spaceId or module.getSpaceId()
 
    local layout = spaces.layout()
    local foundScreenUUID
@@ -214,14 +214,15 @@ module.resetLayouts = function()
 end
 
 module.clear = function()
-   local filter = cache.filter
-   cache = { spaces = {}, layouts = {}, floating = {}, layoutOptions = {}, filter = filter }
-   module.cache = cache
+   local win = hs.window.frontmostWindow()
+   local spaceId = module.getSpaceId(win)
+   cache.spaces[spaceId] = {}
+
    module.tile()
 end
 
 module.resizeLayout = function(resizeOpt)
-   local spaceId = getSpaceId()
+   local spaceId = module.getSpaceId()
    if not spaceId then
       return
    end
@@ -250,7 +251,7 @@ module.resizeLayout = function(resizeOpt)
 end
 
 module.equalizeLayout = function()
-   local spaceId = getSpaceId()
+   local spaceId = module.getSpaceId()
    if not spaceId then
       return
    end

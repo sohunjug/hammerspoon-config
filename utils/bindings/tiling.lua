@@ -199,6 +199,11 @@ module.start = function()
 
    bind("x", hhtwm.clear)
 
+   bind("d", function()
+      local id = hhtwm.getSpaceId()
+      hhtwm.cache.spaces[id][1]:focus()
+   end)
+
    -- [c]enter window
    bind("c", function()
       local win = hs.window.frontmostWindow()

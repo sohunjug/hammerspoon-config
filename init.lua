@@ -27,7 +27,7 @@ hs.hints.showTitleThresh = 0
 -- lower logging level for hotkeys
 require("hs.hotkey").setLogLevel "warning"
 
-local modules = { "bindings", "controlplane", "watchables", "watchers", "wm" }
+local modules = { "bindings", "controlplane", "watchables", "watchers", "wm", "menubar" }
 -- global config
 _G.S_HS_CONFIG = {
    apps = {
@@ -79,6 +79,8 @@ config.controlplane.enabled = {}
 
 -- watchers
 config.watchers.enabled = { "ime", "autoborder" }
+
+config.menubar.enabled = { "space" }
 -- config.watchers.enabled = {}
 
 -- bindings
