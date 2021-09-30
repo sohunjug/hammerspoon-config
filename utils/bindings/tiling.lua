@@ -195,7 +195,9 @@ module.start = function()
    bind("t", hhtwm.tile)
 
    -- [e]qualize
-   bind("e", hhtwm.equalizeLayout)
+   bind("'", hhtwm.equalizeLayout)
+
+   bind("e", hhtwm.setMain)
 
    bind("x", hhtwm.clear)
 

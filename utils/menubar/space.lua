@@ -50,7 +50,12 @@ end
 M.start = function()
    M.darkmode =
       hs.osascript.applescript 'tell application "System Events"\nreturn dark mode of appearance preferences\nend tell'
-   hs.spaces.watcher.new(M.update):start()
+   M.watcher = hs.spaces.watcher.new(M.update)
+   M.watcher:start()
+end
+
+M.stop = function()
+   M.watcher:stop()
 end
 
 return M

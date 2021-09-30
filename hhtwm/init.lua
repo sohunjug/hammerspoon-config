@@ -3,7 +3,7 @@
 local createLayouts = require "hhtwm.layouts"
 local spaces = require "hs._asm.undocumented.spaces"
 
-local cache = { spaces = {}, layouts = {}, floating = {}, layoutOptions = {} }
+local cache = { spaces = {}, layouts = {}, floating = {}, layoutOptions = {}, main = {} }
 local module = { cache = cache }
 
 local layouts = createLayouts(module)
@@ -221,6 +221,14 @@ module.clear = function()
    module.tile()
 end
 
+module.setMain = function()
+   local win = hs.window.frontmostWindow()
+   local spaceId = module.getSpaceId(win)
+   cache.main[spaceId] = win:id()
+
+   module.tile()
+end
+
 module.resizeLayout = function(resizeOpt)
    local spaceId = module.getSpaceId()
    if not spaceId then
@@ -336,6 +344,9 @@ module.swapInDirection = function(win, direction)
       -- winInDirection:setFrame(winFrame)
       -- win:setFrame(winInDirectionFrame)
 
+      if winInDirection:id() == cache.main[winSpaceId] then
+         cache.main[winSpaceId] = nil
+      end
       -- swap positions in arrays
       cache.spaces[winSpaceId][winIdx] = winInDirection
       cache.spaces[winInDirectionSpaceId][winInDirectionIdx] = win
@@ -641,17 +652,30 @@ module.recache = function()
       local tmp = cache.spaces[spaceId] or {}
       local trackedWin, trackedSpaceId, _ = module.findTrackedWindow(win)
 
-      -- log.d('update cache.spaces', hs.inspect({
-      --   win = win,
-      --   spaces = spaces,
-      --   spaceId = spaceId,
-      --   trackedWin = trackedWin or 'none',
-      --   trackedSpaceId = trackedSpaceId or 'none',
-      --   shouldInsert = not trackedWin or trackedSpaceId ~= spaceId
-      -- }))
+      --[[ log.d(
+         "update cache.spaces",
+         hs.inspect {
+            win = win,
+            winid = win:id(),
+            cacheid = cache.main[spaceId] or "none",
+            spaces = spaces,
+            spaceId = spaceId,
+            trackedWin = trackedWin or "none",
+            trackedSpaceId = trackedSpaceId or "none",
+            shouldInsert = not trackedWin or trackedSpaceId ~= spaceId,
+         }
+      ) ]]
 
-      -- window is "new" if it's not in cache at all, or if it changed space
-      if not trackedWin or trackedSpaceId ~= spaceId then
+      if win:id() == cache.main[spaceId] then
+         local t = tmp
+         for index, win in ipairs(t) do
+            if win:id() == cache.main[spaceId] then
+               table.remove(tmp, index)
+            end
+         end
+         table.insert(tmp, 1, win)
+         -- window is "new" if it's not in cache at all, or if it changed space
+      elseif not trackedWin or trackedSpaceId ~= spaceId then
          -- table.insert(tmp, 1, win)
          table.insert(tmp, win)
       end
@@ -676,6 +700,7 @@ module.recache = function()
 end
 
 module.tile = function()
+   log.d "start tiling"
    local currentSpaces = getCurrentSpacesIds()
 
    local tilingWindows = module.recache()
@@ -745,6 +770,7 @@ module.tile = function()
 
                -- only set frame if returned,
                -- this allows for layout to decide if window should be floating
+               -- log.w(111, screen:id(), index, window:title())
                if frame then
                   window:setFrame(frame)
                else
@@ -810,11 +836,12 @@ local loadSettings = function()
    -- load from cache
    local jsonTilingCache = hs.settings.get "hhtwm.tilingCache"
    local jsonFloatingCache = hs.settings.get "hhtwm.floatingCache"
-   cache.ratio = hs.settings.get "hhtwm.ratio"
+   local jsonMainCache = hs.settings.get "hhtwm.mainCache"
 
    log.d "reading from hs.settings"
    log.d("hhtwm.tilingCache", jsonTilingCache)
    log.d("hhtwm.floatingCache", jsonFloatingCache)
+   log.d("hhtwm.mainCache", jsonMainCache)
 
    -- all windows from window filter
    local allWindows = getAllWindowsUsingSpaces()
@@ -849,6 +876,17 @@ local loadSettings = function()
       end)
    end
 
+   if jsonMainCache then
+      local mainCache = hs.json.decode(jsonMainCache)
+      local spacesIds = getSpacesIdsTable()
+      hs.fnutils.each(mainCache, function(obj)
+         -- we don't care about spaces that no longer exist
+         if hs.fnutils.contains(spacesIds, obj.spaceId) then
+            cache.main[obj.spaceId] = obj.winId
+         end
+      end)
+   end
+
    -- decode floating cache
    if jsonFloatingCache then
       local floatingCache = hs.json.decode(jsonFloatingCache)
@@ -866,6 +904,7 @@ local loadSettings = function()
    log.d "read from hs.settings"
    log.d("cache.spaces", hs.inspect(cache.spaces))
    log.d("cache.floating", hs.inspect(cache.floating))
+   log.d("cache.main", hs.inspect(cache.main))
 end
 
 local saveSettings = function()
@@ -898,16 +937,25 @@ local saveSettings = function()
       end
    end
 
+   local mainCache = {}
+   for spaceId, winId in pairs(cache.main) do
+      if winId then
+         table.insert(mainCache, { spaceId = spaceId, winId = winId })
+      end
+   end
+
    local jsonTilingCache = hs.json.encode(tilingCache)
    local jsonFloatingCache = hs.json.encode(floatingCache)
+   local jsonMainCache = hs.json.encode(mainCache)
 
    log.d "storing to hs.settings"
    log.d("hhtwm.tiling", jsonTilingCache)
    log.d("hhtwm.floating", jsonFloatingCache)
+   log.d("hhtwm.main", jsonMainCache)
 
    hs.settings.set("hhtwm.tilingCache", jsonTilingCache)
    hs.settings.set("hhtwm.floatingCache", jsonFloatingCache)
-   hs.settings.set("hhtwm.ratio", cache.ratio)
+   hs.settings.set("hhtwm.mainCache", jsonMainCache)
 end
 
 module.start = function()
@@ -917,7 +965,7 @@ module.start = function()
    -- start window filter
    cache.filter = hs.window.filter.new():setDefaultFilter():setOverrideFilter {
       visible = true, -- only allow visible windows
-      fullscreen = false, -- ignore fullscreen windows
+      -- fullscreen = false, -- ignore fullscreen windows
       currentSpace = true, -- only windows on current space
       allowRoles = { "AXStandardWindow", "AXWindow" },
       -- allowRoles = "*",
@@ -928,7 +976,7 @@ module.start = function()
    loadSettings()
 
    -- retile automatically when windows change
-   cache.filter:subscribe({ hs.window.filter.windowsChanged, hs.window.filter.windowMoved }, module.tile)
+   cache.filter:subscribe({ hs.window.filter.windowMoved }, module.tile)
 
    -- update on screens change
    cache.screenWatcher = hs.screen.watcher.newWithActiveScreen(module.tile):start()
@@ -950,7 +998,7 @@ module.stop = function()
    -- stop watching screens
    cache.screenWatcher:stop()
 
-   cache.spacesWatcher:stop()
+   cache.spaceWatcher:stop()
 end
 
 return module
