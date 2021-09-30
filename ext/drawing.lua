@@ -54,8 +54,12 @@ module.drawBorder = function()
 
    if not cache.borderCanvas then
       cache.borderCanvas = hs.canvas.new({ x = 0, y = 0, w = 0, h = 0 })
-         :level(hs.canvas.windowLevels.overlay)
-         :behavior({ hs.canvas.windowBehaviors.transient, hs.canvas.windowBehaviors.moveToActiveSpace })
+         :level(hs.canvas.windowLevels.normal)         -- :level(hs.canvas.windowLevels.overlay)
+
+         :behavior({
+            hs.canvas.windowBehaviors.transient,
+            hs.canvas.windowBehaviors.moveToActiveSpace,
+         })
          :alpha(alpha)
    end
 

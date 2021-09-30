@@ -61,11 +61,28 @@ local focusAndHighlight = function(cmd)
    end
 end
 
+local highlightinit = function()
+   hs.window.highlight.ui.overlay = true
+   hs.window.highlight.ui.overlayColor = { 0.2, 0.05, 0, 0.25 }
+   hs.window.highlight.ui.overlayColorInverted = { 0.8, 0.9, 1, 0.3 }
+   hs.window.highlight.ui.isolateColor = { 0, 0, 0, 0.95 }
+   hs.window.highlight.ui.isolateColorInverted = { 1, 1, 1, 0.95 }
+   hs.window.highlight.ui.frameWidth = 10
+   hs.window.highlight.ui.frameColor = { 0, 0.6, 1, 0.5 }
+   hs.window.highlight.ui.frameColorInvert = { 1, 0.4, 0, 0.5 }
+   hs.window.highlight.ui.flashDuration = 0
+   hs.window.highlight.ui.windowShownFlashColor = { 0, 1, 0, 0.8 }
+   hs.window.highlight.ui.windowHiddenFlashColor = { 1, 0, 0, 0.8 }
+   hs.window.highlight.ui.windowShownFlashColorInvert = { 1, 0, 1, 0.8 }
+   hs.window.highlight.ui.windowHiddenFlashColorInvert = { 0, 1, 1, 0.8 }
+end
+
 module.start = function()
    local bind = function(key, fn)
       hs.hotkey.bind({ "ctrl", "alt" }, key, fn, nil, fn)
    end
 
+   highlightinit()
    cache.focusFilter = hs.window.filter.new():setCurrentSpace(true):setDefaultFilter():keepActive()
 
    hs.fnutils.each({
@@ -79,6 +96,17 @@ module.start = function()
       end)
    end)
 
+   bind("g", function()
+      hs.window.highlight.start()
+   end)
+
+   bind("t", function()
+      hs.window.highlight.stop()
+   end)
+
+   bind("y", function()
+      hs.window.highlight.toggleIsolate()
+   end)
    -- cycle between windows on current screen, useful in tiling monocle mode
    bind("]", function()
       cycleWindows("next", APP_WINDOWS_ONLY, SCREEN_WINDOWS_ONLY)
