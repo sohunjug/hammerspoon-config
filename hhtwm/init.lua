@@ -700,7 +700,19 @@ module.recache = function()
 end
 
 module.tile = function()
+   if cache.timer then
+      cache.timer:stop()
+   else
+   end
+   cache.timer = hs.timer.doAfter(0.01, module.tiling)
+   cache.timer:start()
+end
+
+module.tiling = function()
+   log.d "-------------------------------------"
+   log.d(debug.traceback("message", 1))
    log.d "start tiling"
+   log.d "-------------------------------------"
    local currentSpaces = getCurrentSpacesIds()
 
    local tilingWindows = module.recache()
@@ -976,11 +988,17 @@ module.start = function()
    loadSettings()
 
    -- retile automatically when windows change
-   cache.filter:subscribe({ hs.window.filter.windowMoved }, module.tile)
+   cache.filter:subscribe(
+      { hs.window.filter.windowMoved, hs.window.windowsChanged },
+      -- hs.fnutils.partial(module.tile, "filter")
+      module.tile
+   )
 
    -- update on screens change
+   -- cache.screenWatcher = hs.screen.watcher.newWithActiveScreen(hs.fnutils.partial(module.tile, "screen")):start()
    cache.screenWatcher = hs.screen.watcher.newWithActiveScreen(module.tile):start()
 
+   -- cache.spaceWatcher = hs.spaces.watcher.new(hs.fnutils.partial(module.tile, "space")):start()
    cache.spaceWatcher = hs.spaces.watcher.new(module.tile):start()
    -- cache.screenWatcher = hs.screen.watcher.new(module.tile):start()
 
