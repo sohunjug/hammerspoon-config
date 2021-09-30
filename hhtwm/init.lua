@@ -932,6 +932,8 @@ module.start = function()
 
    -- update on screens change
    cache.screenWatcher = hs.screen.watcher.newWithActiveScreen(module.tile):start()
+
+   cache.spaceWatcher = hs.spaces.watcher.new(module.tile):start()
    -- cache.screenWatcher = hs.screen.watcher.new(module.tile):start()
 
    -- tile on start
@@ -947,6 +949,8 @@ module.stop = function()
 
    -- stop watching screens
    cache.screenWatcher:stop()
+
+   cache.spacesWatcher:stop()
 end
 
 return module
