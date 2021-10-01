@@ -25,7 +25,13 @@ module.start = function(config)
    hs.fnutils.each({
       { key = "/", fn = system.toggleConsole },
       { key = "b", fn = system.toggleBluetooth },
-      { key = "d", fn = system.toggleDND },
+      -- { key = "d", fn = system.toggleDND },
+      {
+         key = "d",
+         fn = function()
+            hs.execute "killall Dock"
+         end,
+      },
       { key = "g", fn = grid.toggleGrid },
       { key = "c", fn = wm.cycleLayout },
       { key = "-", fn = hs.fnutils.partial(wm.cache.hhtwm.resizeLayout, "thinner") },

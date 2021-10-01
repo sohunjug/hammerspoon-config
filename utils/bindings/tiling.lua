@@ -243,7 +243,7 @@ module.start = function()
          local ID = spaces.activeSpace()
 
          if ID ~= spaceID and spaceID ~= nil then
-            spaces.changeToSpace(spaceID, true)
+            spaces.changeToSpace(spaceID, false)
          end
          -- hs.window.filter.switchedToSpace(idx)
       end)

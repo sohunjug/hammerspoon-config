@@ -226,6 +226,7 @@ module.setMain = function()
    local spaceId = module.getSpaceId(win)
    cache.main[spaceId] = win:id()
 
+   module.tiling()
    module.tile()
 end
 
@@ -709,10 +710,10 @@ module.tile = function()
 end
 
 module.tiling = function()
-   log.d "-------------------------------------"
+   --[[ log.d "-------------------------------------"
    log.d(debug.traceback("message", 1))
    log.d "start tiling"
-   log.d "-------------------------------------"
+   log.d "-------------------------------------" ]]
    local currentSpaces = getCurrentSpacesIds()
 
    local tilingWindows = module.recache()
@@ -823,6 +824,18 @@ module.detectTile = function(win)
          local roleMatches = ternary(obj.role ~= nil, obj.role == role, true)
          local subroleMatches = ternary(obj.subrole ~= nil, obj.subrole == subrole, true)
 
+         --[[ if app == "微信" and obj.app == "微信" then
+            log.d(hs.inspect {
+               o = obj,
+               a = appMatches,
+               t = titleMatches,
+               r = role,
+               s = subrole,
+               app = app,
+               title = title,
+               result = appMatches and titleMatches and roleMatches and subroleMatches,
+            })
+         end ]]
          return appMatches and titleMatches and roleMatches and subroleMatches
       end)
 

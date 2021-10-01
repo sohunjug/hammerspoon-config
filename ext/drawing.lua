@@ -1,5 +1,6 @@
 local cache = { borderDrawings = {}, borderDrawingFadeOuts = {} }
 local module = { cache = cache }
+local log = hs.logger.new("drawing", "debug")
 
 -- returns 'graphite' or 'aqua'
 local getOSXAppearance = function()
@@ -36,12 +37,12 @@ module.drawBorder = function()
    end
 
    -- print(hs.inspect(focusedWindow))
-   --[[ print(
-      "draw",
+   --[[ log.d(
+      focusedWindow:id(),
       focusedWindow:role(),
-      focusedWindow:pid(),
       focusedWindow:subrole(),
-      -- focusedWindow:title(),
+      focusedWindow:title(),
+      focusedWindow:application():name(),
       require("hhtwm").isFloating(focusedWindow)
    ) ]]
    local alpha = 0.6
@@ -54,7 +55,7 @@ module.drawBorder = function()
 
    if not cache.borderCanvas then
       cache.borderCanvas = hs.canvas.new({ x = 0, y = 0, w = 0, h = 0 })
-         :level(hs.canvas.windowLevels.normal)         -- :level(hs.canvas.windowLevels.overlay)
+         :level(hs.canvas.windowLevels.normal) -- :level(hs.canvas.windowLevels.overlay)
 
          :behavior({
             hs.canvas.windowBehaviors.transient,
