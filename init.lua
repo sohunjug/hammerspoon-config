@@ -30,6 +30,7 @@ require("hs.hotkey").setLogLevel "warning"
 local modules = { "bindings", "controlplane", "watchables", "watchers", "wm", "menubar" }
 -- global config
 _G.S_HS_CONFIG = {
+   airpods = "向阳的AirPods",
    apps = {
       terms = { "Kitty", "iTerm2", "Termianl", "终端" },
       nvim = { "Alacritty" },
@@ -59,7 +60,14 @@ _G.S_HS_CONFIG = {
    },
 
    network = {
-      home = "Ting",
+      home = {
+         wifi = "Ting",
+         browser = "com.google.Chrome.canary",
+      },
+      work = {
+         wifi = "kayakwise_5G",
+         browser = "com.google.Chrome",
+      },
    },
 
    homebridge = {
@@ -79,6 +87,10 @@ config.controlplane.enabled = {}
 
 -- watchers
 config.watchers.enabled = { "ime", "autoborder" }
+
+if hs.host.localizedName() == "sohunjug-MacBookAir" then
+   table.insert(cacke.watchables.enabled, "urlevent")
+end
 
 config.menubar.enabled = { "space" }
 -- config.watchers.enabled = {}

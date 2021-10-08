@@ -72,11 +72,12 @@ function M.echoInfo()
    local source = M.app2Ime[hs.window.focusedWindow():application():path()]
    local language = source and source or English()
    hs.alert.show(
-
       "App path:        "
          .. hs.window.focusedWindow():application():path()
          .. "\nApp name:      "
          .. hs.window.focusedWindow():application():name()
+         .. "\nBundleID:      "
+         .. hs.window.focusedWindow():application():bundleID()
          .. "\nIM source id:  "
          .. hs.keycodes.currentSourceID()
          .. "\n"
