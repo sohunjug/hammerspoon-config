@@ -5,7 +5,7 @@ local grid = require "ext.grid"
 local smartLaunchOrFocus = require("ext.application").smartLaunchOrFocus
 local system = require "ext.system"
 local window = require "ext.window"
-local cache = {}
+-- local cache = {}
 
 -- local toggleCaffeine = require('utils.controlplane.caffeine').toggleCaffeine
 -- local toggleVPN      = require('utils.controlplane.persistvpn').toggleVPN
@@ -65,7 +65,9 @@ module.start = function(config)
             hs.audiodevice.watcher.setCallback(nil)
          end
       end)
-      hs.audiodevice.watcher.start()
+      if not hs.audiodevice.watcher.isRunning() then
+         hs.audiodevice.watcher.start()
+      end
    end
    -- toggles
    hs.fnutils.each({

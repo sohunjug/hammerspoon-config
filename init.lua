@@ -89,7 +89,7 @@ config.controlplane.enabled = {}
 config.watchers.enabled = { "ime", "autoborder" }
 
 if hs.host.localizedName() == "sohunjug-MacBookAir" then
-   table.insert(cacke.watchables.enabled, "urlevent")
+   table.insert(config.watchers.enabled, "urlevent")
 end
 
 config.menubar.enabled = { "space" }
