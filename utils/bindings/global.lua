@@ -17,9 +17,9 @@ module.start = function(config)
    hs.hotkey.bind({ "ctrl" }, "tab", window.windowHints)
 
    -- force paste (sometimes cmd + v is blocked)
-   hs.hotkey.bind({ "cmd", "alt", "shift" }, "v", function()
+   --[[ hs.hotkey.bind({ "cmd", "alt", "shift" }, "v", function()
       hs.eventtap.keyStrokes(hs.pasteboard.getContents())
-   end)
+   end) ]]
 
    -- toggles
    hs.fnutils.each({

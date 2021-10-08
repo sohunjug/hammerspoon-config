@@ -237,7 +237,7 @@ module.start = function()
    for n = 1, 9 do
       local idx = tostring(n)
 
-      hs.hotkey.bind({ "ctrl", "alt", "cmd" }, idx, nil, function()
+      hs.hotkey.bind({ "shift", "alt" }, idx, nil, function()
          local uuid = hs.screen.mainScreen():spacesUUID()
          local spaceID = spaces.layout()[uuid][n]
          local ID = spaces.activeSpace()
