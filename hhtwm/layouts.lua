@@ -41,6 +41,7 @@ return function(hhtwm)
       local margin = hhtwm.margin or 0
       local insetFrame = getInsetFrame(screen)
 
+      -- print(layoutOptions.mainPaneRatio)
       local frame = {
          x = insetFrame.x,
          y = insetFrame.y,
@@ -206,6 +207,7 @@ return function(hhtwm)
       local margin = hhtwm.margin or 0
       local insetFrame = getInsetFrame(screen)
 
+      -- print(hs.inspect(layoutOptions))
       if layoutOptions.mainPaneRatio < 0.51 then
          layoutOptions.mainPaneRatio = 0.6
       end

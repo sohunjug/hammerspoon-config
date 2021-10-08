@@ -12,7 +12,7 @@ local log = hs.logger.new("hhtwm", "debug")
 local SWAP_BETWEEN_SCREENS = false
 
 local getDefaultLayoutOptions = function()
-   return {
+   return hs.fnutils.copy {
       mainPaneRatio = 0.5,
    }
 end
@@ -669,8 +669,8 @@ module.recache = function()
 
       if win:id() == cache.main[spaceId] then
          local t = tmp
-         for index, win in ipairs(t) do
-            if win:id() == cache.main[spaceId] then
+         for index, _win in ipairs(t) do
+            if _win:id() == cache.main[spaceId] then
                table.remove(tmp, index)
             end
          end
@@ -781,6 +781,11 @@ module.tiling = function()
                   cache.layoutOptions[spaceId] or getDefaultLayoutOptions()
                )
 
+               --[[ log.d(
+                  layoutName,
+                  cache.layoutOptions[spaceId],
+                  hs.inspect { spaceId = spaceId, layoutOptions = cache.layoutOptions[spaceId] }
+               ) ]]
                -- only set frame if returned,
                -- this allows for layout to decide if window should be floating
                -- log.w(111, screen:id(), index, window:title())
@@ -887,7 +892,7 @@ local loadSettings = function()
          if hs.fnutils.contains(spacesIds, obj.spaceId) then
             cache.spaces[obj.spaceId] = {}
             cache.layouts[obj.spaceId] = obj.layout
-            cache.layoutOptions[obj.spaceId] = obj.layoutOptions
+            cache.layoutOptions[obj.spaceId] = hs.fnutils.copy(obj.layoutOptions or getDefaultLayoutOptions())
 
             hs.fnutils.each(obj.windowIds, function(winId)
                local win = findWindowById(winId)
