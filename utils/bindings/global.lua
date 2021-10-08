@@ -1,9 +1,11 @@
 local module = {}
+local template = require "ext.template"
 local wm = require "utils.wm"
 local grid = require "ext.grid"
 local smartLaunchOrFocus = require("ext.application").smartLaunchOrFocus
 local system = require "ext.system"
 local window = require "ext.window"
+local cache = {}
 
 -- local toggleCaffeine = require('utils.controlplane.caffeine').toggleCaffeine
 -- local toggleVPN      = require('utils.controlplane.persistvpn').toggleVPN
@@ -21,6 +23,50 @@ module.start = function(config)
       hs.eventtap.keyStrokes(hs.pasteboard.getContents())
    end) ]]
 
+   local airpods = function()
+      hs.osascript.applescript(template(
+         [[
+         use framework "IOBluetooth"
+         use scripting additions
+
+         set AirPodsName to "{AIRPODS}"
+
+         on getFirstMatchingDevice(deviceName)
+            repeat with device in (current application's IOBluetoothDevice's pairedDevices() as list)
+               if (device's nameOrAddress as string) contains deviceName then return device
+            end repeat
+         end getFirstMatchingDevice
+
+         on toggleDevice(device)
+            if not (device's isConnected as boolean) then
+               device's openConnection()
+               return "Connecting " & (device's nameOrAddress as string)
+            else
+               device's closeConnection()
+               return "Disconnecting " & (device's nameOrAddress as string)
+            end if
+         end toggleDevice
+
+         return toggleDevice(getFirstMatchingDevice(AirPodsName))
+      ]],
+         { AIRPODS = S_HS_CONFIG.airpods }
+      ))
+      hs.audiodevice.watcher.setCallback(function(event)
+         if event == "dev#" then
+            -- print(hs.inspect(event))
+            -- print(hs.inspect(hs.audiodevice.allDevices()))
+            local dev = hs.audiodevice.findDeviceByName(S_HS_CONFIG.airpods)
+            if dev ~= nil then
+               dev:setDefaultEffectDevice()
+               dev:setDefaultInputDevice()
+               dev:setDefaultOutputDevice()
+            end
+            hs.audiodevice.watcher.stop()
+            hs.audiodevice.watcher.setCallback(nil)
+         end
+      end)
+      hs.audiodevice.watcher.start()
+   end
    -- toggles
    hs.fnutils.each({
       { key = "/", fn = system.toggleConsole },
@@ -32,6 +78,7 @@ module.start = function(config)
             hs.execute "killall Dock"
          end,
       },
+      { key = "a", fn = airpods },
       { key = "g", fn = grid.toggleGrid },
       { key = "c", fn = wm.cycleLayout },
       { key = "-", fn = hs.fnutils.partial(wm.cache.hhtwm.resizeLayout, "thinner") },
@@ -63,6 +110,8 @@ module.start = function(config)
    end)
 end
 
-module.stop = function() end
+module.stop = function()
+   hs.audiodevice.watcher.stop()
+end
 
 return module

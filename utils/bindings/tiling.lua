@@ -3,7 +3,8 @@ local spaces = require "hs._asm.undocumented.spaces"
 local capitalize = require("ext.utils").capitalize
 local wm = require "utils.wm"
 
-local module = {}
+local cache = {}
+local module = { cache = cache }
 local windowMeta = {}
 local hhtwm = wm.cache.hhtwm
 
@@ -237,6 +238,19 @@ module.start = function()
    for n = 1, 9 do
       local idx = tostring(n)
 
+      local tfn = function()
+         hs.execute "killall Dock"
+         cache.timer = nil
+      end
+
+      local timerReload = function()
+         if cache.timer then
+            cache.timer:stop()
+         end
+         cache.timer = hs.timer.doAfter(5, tfn)
+         cache.timer:start()
+      end
+
       hs.hotkey.bind({ "shift", "alt" }, idx, nil, function()
          local uuid = hs.screen.mainScreen():spacesUUID()
          local spaceID = spaces.layout()[uuid][n]
@@ -244,6 +258,7 @@ module.start = function()
 
          if ID ~= spaceID and spaceID ~= nil then
             spaces.changeToSpace(spaceID, false)
+            timerReload()
          end
          -- hs.window.filter.switchedToSpace(idx)
       end)
@@ -274,7 +289,8 @@ module.start = function()
 
          -- if window switched space, then follow it (ctrl + 0..9) and focus
          if success then
-            spaces.changeToSpace(spaceID, true)
+            spaces.changeToSpace(spaceID, false)
+            timerReload()
             -- hs.eventtap.keyStroke({ "ctrl" }, idx)
 
             -- retile and re-highlight window after we switch space
@@ -289,6 +305,11 @@ module.start = function()
    end
 end
 
-module.stop = function() end
+module.stop = function()
+   if cache.timer then
+      cache.timer:stop()
+      cache.timer = nil
+   end
+end
 
 return module
