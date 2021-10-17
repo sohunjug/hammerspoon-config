@@ -1,6 +1,3 @@
-[submodule "source/hammerspoon_asm"]
-	path = source/hammerspoon_asm
-	url = https://github.com/asmagill/hammerspoon_asm
 [submodule "source/hs._asm.undocumented.spaces"]
 	path = source/hs._asm.undocumented.spaces
 	url = https://github.com/asmagill/hs._asm.undocumented.spaces
