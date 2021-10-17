@@ -43,6 +43,10 @@ module.drawBorder = function()
       focusedWindow:subrole(),
       focusedWindow:title(),
       focusedWindow:application():name(),
+      focusedWindow:application():bundleID(),
+      focusedWindow:application():path(),
+      focusedWindow:application():kind(),
+      hs.inspect(focusedWindow:application():allWindows()),
       require("hhtwm").isFloating(focusedWindow)
    ) ]]
    local alpha = 0.6

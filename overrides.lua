@@ -1,5 +1,5 @@
 local axuiWindowElement = require("hs._asm.axuielement").windowElement
-local hhtwm = require "hhtwm"
+local hhtwm = require "widget.swm"
 local module = {}
 local log = hs.logger.new("overrides", "debug")
 

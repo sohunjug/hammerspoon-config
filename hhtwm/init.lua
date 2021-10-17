@@ -622,6 +622,13 @@ module.recache = function()
 
    hs.fnutils.each(allWindows or {}, function(win)
       -- we don't care about minimized or fullscreen windows
+      --[[ log.d(hs.inspect {
+         id = win:id(),
+         min = win:isMinimized(),
+         full = win:isFullScreen(),
+         spaces = win:spaces(),
+         subrole = win:subrole(),
+      }) ]]
       if win:isMinimized() or win:isFullscreen() then
          return
       end
@@ -635,12 +642,20 @@ module.recache = function()
          return
       end
 
+      if win:application():name() == "imklaunchagent" then
+         log.d(hs.inspect { title = win:title() })
+         return
+      end
+
       if shouldFloat(win) then
          table.insert(floatingWindows, win)
       else
          table.insert(tilingWindows, win)
       end
    end)
+
+   -- log.d("tiling", hs.inspect(tilingWindows))
+   -- log.d("floating", hs.inspect(floatingWindows))
 
    -- add new tiling windows to cache
    hs.fnutils.each(tilingWindows, function(win)
@@ -651,6 +666,9 @@ module.recache = function()
       local space = win:spaces()
       local spaceId = space[1]
       local tmp = cache.spaces[spaceId] or {}
+      if type(tmp) ~= "table" then
+         tmp = {}
+      end
       local trackedWin, trackedSpaceId, _ = module.findTrackedWindow(win)
 
       --[[ log.d(

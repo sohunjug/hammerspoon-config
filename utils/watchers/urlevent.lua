@@ -31,8 +31,24 @@ module.start = function(_)
       -- }
       -- ))
 
-      local isAtHome = hs.wifi.currentNetwork() == S_HS_CONFIG.network.home.wifi
-      local isAtWork = hs.wifi.currentNetwork() == S_HS_CONFIG.network.work.wifi
+      local isAtHome = false
+      local isAtWork = false
+      if type(S_HS_CONFIG.network.home.wifi) == "string" then
+         isAtHome = hs.wifi.currentNetwork() == S_HS_CONFIG.network.home.wifi
+      end
+      if type(S_HS_CONFIG.network.work.wifi) == "string" then
+         isAtWork = hs.wifi.currentNetwork() == S_HS_CONFIG.network.work.wifi
+      end
+      if type(S_HS_CONFIG.network.home.wifi) == "table" then
+         isAtHome = hs.fnutils.find(S_HS_CONFIG.network.home.wifi, function(wifi)
+            return hs.wifi.currentNetwork() == wifi
+         end)
+      end
+      if type(S_HS_CONFIG.network.work.wifi) == "table" then
+         isAtWork = hs.fnutils.find(S_HS_CONFIG.network.work.wifi, function(wifi)
+            return hs.wifi.currentNetwork() == wifi
+         end)
+      end
 
       local handler = hs.urlevent.getDefaultHandler "http"
 

@@ -1,0 +1,30 @@
+[submodule "ModuleWalkthrough"]
+	path = ModuleWalkthrough
+	url = https://github.com/asmagill/HS_ModuleWalkthrough.git
+[submodule "wip/_undocumented"]
+	path = _undocumented
+	url = https://github.com/asmagill/hammerspoon_asm.undocumented.git
+[submodule "wip/filelistmenu"]
+	path = filelistmenu
+	url = https://github.com/asmagill/hammerspoon_filelistmenu.git
+[submodule "axuielement"]
+	path = axuielement
+	url = https://github.com/asmagill/hs._asm.axuielement.git
+[submodule "text"]
+	path = text
+	url = https://github.com/asmagill/hs.text.git
+[submodule "guitk"]
+	path = guitk
+	url = https://github.com/asmagill/hs._asm.guitk.git
+[submodule "xml"]
+	path = xml
+	url = https://github.com/asmagill/hs._asm.xml.git
+[submodule "cfpreferences"]
+	path = cfpreferences
+	url = https://github.com/asmagill/hs._asm.cfpreferences.git
+[submodule "x11"]
+	path = x11
+	url = https://github.com/asmagill/hs.window.x11.git
+[submodule "sysctl"]
+	path = sysctl
+	url = https://github.com/asmagill/hs.host.sysctl.git

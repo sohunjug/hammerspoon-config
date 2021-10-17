@@ -61,11 +61,11 @@ _G.S_HS_CONFIG = {
 
    network = {
       home = {
-         wifi = "Ting",
+         wifi = { "Ting", "sohunjug-wifi", "sohunjug", "T" },
          browser = "com.google.Chrome.canary",
       },
       work = {
-         wifi = "kayakwise_5G",
+         wifi = { "kayakwise_5G", "kayakwise" },
          browser = "com.google.Chrome",
       },
    },

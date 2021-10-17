@@ -43,3 +43,5 @@ luac.out
 
 .DS_Store
 gitlab-dashboard
+hs/_asm
+hs/spaces
