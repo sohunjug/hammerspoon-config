@@ -847,44 +847,53 @@ M.tiling = function()
 
       local spaceWindows = ensureCacheSpaces(screenIdx, spaceIdx)
 
-      for i = #spaceWindows, 1, -1 do
-         -- window exists in cache if there's spaceId and windowId match
-         local existsOnScreen = hs.fnutils.find(tilingWindows, function(win)
-            return win:id() == spaceWindows[i]:id() and win:spaces()[1] == spaceId
-         end)
+      local checkDuplicate = function(windows)
+         for i = #windows, 1, -1 do
+            -- window exists in cache if there's spaceId and windowId match
+            local existsOnScreen = hs.fnutils.find(tilingWindows, function(win)
+               return win:id() == windows[i]:id() and win:spaces()[1] == spaceId
+            end)
 
-         -- window is duplicated (why?) if it's tracked more than once
-         -- this shouldn't happen, but helps for now...
-         local duplicateIdx = 0
+            -- window is duplicated (why?) if it's tracked more than once
+            -- this shouldn't happen, but helps for now...
+            local duplicateIdx = 0
 
-         for j = 1, #spaceWindows do
-            if spaceWindows[i]:id() == spaceWindows[j]:id() and i ~= j then
-               duplicateIdx = j
+            for j = 1, #windows do
+               if windows[i]:id() == windows[j]:id() and i ~= j then
+                  duplicateIdx = j
+               end
+            end
+
+            if duplicateIdx > 0 then
+               log.e(
+                  "duplicate idx",
+                  hs.inspect {
+                     i = i,
+                     duplicateIdx = duplicateIdx,
+                     windows = windows,
+                  }
+               )
+            end
+
+            if not existsOnScreen or duplicateIdx > 0 then
+               -- if spaceWindows[i] == win then
+               table.remove(windows, i)
+               if duplicateIdx > 0 then
+                  table.remove(spaceWindows, duplicateIdx)
+               end
+               return true
+               -- else
+               -- end
+               -- table.remove(spaceWindows, duplicateIdx)
+               -- i = i - 1
+            else
+               i = i + 1
             end
          end
+         return false
+      end
 
-         if duplicateIdx > 0 then
-            log.e(
-               "duplicate idx",
-               hs.inspect {
-                  i = i,
-                  duplicateIdx = duplicateIdx,
-                  spaceWindows = spaceWindows,
-               }
-            )
-         end
-
-         if not existsOnScreen or duplicateIdx > 0 then
-            -- if spaceWindows[i] == win then
-            -- table.remove(spaceWindows, duplicateIdx)
-            -- else
-            table.remove(spaceWindows, duplicateIdx)
-            -- end
-            -- table.remove(spaceWindows, duplicateIdx)
-            -- i = i - 1
-         else
-            i = i + 1
-         end
+      while checkDuplicate(spaceWindows) do
       end
 
       cache.spaces[screenIdx][spaceIdx] = spaceWindows
