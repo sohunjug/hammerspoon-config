@@ -16,8 +16,11 @@ local num = {
 
 M.update = function()
    if M.menubar == nil then
-      -- M.menubar = hs.menubar.newWithPriority(hs.menubar.priorities["default"])
-      M.menubar = hs.menubar.new(hs.menubar.priorities["default"])
+      -- M.menubar = hs.menubar.newWithPriority(hs.menubar.priorities["system"])
+      -- M.menubar = hs.menubar.new(hs.menubar.priorities["default"])
+      -- M.menubar = hs.menubar.new(hs.menubar.priorities["system"])
+      M.menubar = hs.menubar.new(true)
+      M.menubar:priority(hs.menubar.priorities["default"])
    end
    local win = hs.window.frontmostWindow()
    local uuid = hs.window.frontmostWindow():screen():getUUID()

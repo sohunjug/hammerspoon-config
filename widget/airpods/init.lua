@@ -32,23 +32,20 @@ M.connect = function(name)
       ]],
          { AIRPODS = name }
       ))
+      hs.timer.waitUntil(function()
+         return hs.audiodevice.findOutputByName(name)
+      end, function()
+         local audioDevice = hs.audiodevice.findOutputByName(name)
+         -- audioDevice:setDefaultEffectDevice()
+         audioDevice:setDefaultOutputDevice()
+         audioDevice:setDefaultInputDevice()
+         audioDevice:setMuted(false)
+      end)
    else
       audiodevice:setDefaultOutputDevice()
       audiodevice:setDefaultInputDevice()
       audiodevice:setMuted(false)
    end
-
-   hs.timer.doAfter(0.1, function()
-      local audioDevice = hs.audiodevice.findOutputByName(name)
-      if not audioDevice then
-         module.airpods()
-         return
-      end
-      -- audioDevice:setDefaultEffectDevice()
-      audioDevice:setDefaultOutputDevice()
-      audioDevice:setDefaultInputDevice()
-      audioDevice:setMuted(false)
-   end)
 end
 
 return M

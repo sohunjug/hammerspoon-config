@@ -208,8 +208,8 @@ M.findTrackedWindow = function(winOrWinId)
       ensureCacheSpaces(_screenIdx, _spaceIdx)
 
       for screenIdx, spaceIds in pairs(cache.spaces) do
-         for spaceIdx, spaceWindows in pairs(spaceIds) do
-            for winIdx, _win in pairs(spaceWindows) do
+         for spaceIdx, spaceWindows in ipairs(spaceIds) do
+            for winIdx, _win in ipairs(spaceWindows) do
                if _win:id() == wId then
                   return _win:id(), spaceIdx, winIdx, screenIdx
                end
@@ -782,7 +782,7 @@ M.recache = function()
       local _screenIdx = getScreenIndex(win:screen())
       local _spaceIdx = getSpaceIndex(win)
       local tmp = ensureCacheSpaces(_screenIdx, _spaceIdx)
-      local trackedWinId, trackedSpaceIdx, trackedWinIdx, trackedScreenIdx = M.findTrackedWindow(win)
+      local trackedWinId, trackedSpaceIdx, _, trackedScreenIdx = M.findTrackedWindow(win)
 
       if win:id() == cache.main[_screenIdx][_spaceIdx] then
          -- local t = tmp
@@ -791,7 +791,12 @@ M.recache = function()
          -- table.remove(tmp, index)
          -- end
          -- end
-         table.remove(tmp, trackedWinIdx)
+         -- table.remove(tmp, trackedWinIdx)
+         for i = #tmp, 1, -1 do
+            if tmp[i]:id() == win:id() then
+               table.remove(tmp, i)
+            end
+         end
          table.insert(tmp, 1, win)
          -- window is "new" if it's not in cache at all, or if it changed space
       elseif not trackedWinId or trackedSpaceIdx ~= _spaceIdx or trackedScreenIdx ~= _screenIdx then
