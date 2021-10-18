@@ -958,7 +958,11 @@ M.detectTile = function(win)
    if M.filters then
       local foundMatch = hs.fnutils.find(M.filters, function(obj)
          local appMatches = ternary(obj.app ~= nil and app ~= nil, string.match(app, obj.app or ""), true)
-         local bundleMatches = ternary(obj.bundle ~= nil and bundle ~= nil, string.match(bundle, obj.app or ""), true)
+         local bundleMatches = ternary(
+            obj.bundle ~= nil and bundle ~= nil,
+            string.match(bundle, obj.bundle or ""),
+            true
+         )
          local titleMatches = ternary(obj.title ~= nil and title ~= nil, string.match(title, obj.title or ""), true)
          local roleMatches = ternary(obj.role ~= nil, obj.role == role, true)
          local subroleMatches = ternary(obj.subrole ~= nil, obj.subrole == subrole, true)
@@ -985,7 +989,11 @@ M.detectSpace = function(win)
    if M.filters then
       local foundMatch = hs.fnutils.find(M.filters, function(obj)
          local appMatches = ternary(obj.app ~= nil and app ~= nil, string.match(app, obj.app or ""), true)
-         local bundleMatches = ternary(obj.bundle ~= nil and bundle ~= nil, string.match(bundle, obj.app or ""), true)
+         local bundleMatches = ternary(
+            obj.bundle ~= nil and bundle ~= nil,
+            string.match(bundle, obj.bundle or ""),
+            true
+         )
          local titleMatches = ternary(obj.title ~= nil and title ~= nil, string.match(title, obj.title or ""), true)
          local roleMatches = ternary(obj.role ~= nil, obj.role == role, true)
          local subroleMatches = ternary(obj.subrole ~= nil, obj.subrole == subrole, true)

@@ -3,7 +3,7 @@ local cache = {}
 local M = { cache = cache }
 
 M.connect = function(name)
-   local audiodevice = hs.audiodevice.findDeviceByName(name)
+   local audiodevice = hs.audiodevice.findOutputByName(name)
    if not audiodevice then
       hs.osascript.applescript(template(
          [[
@@ -38,8 +38,8 @@ M.connect = function(name)
       audiodevice:setMuted(false)
    end
 
-   hs.timer.doAfter(3, function()
-      local audioDevice = hs.audiodevice.findDeviceByName(name)
+   hs.timer.doAfter(0.1, function()
+      local audioDevice = hs.audiodevice.findOutputByName(name)
       if not audioDevice then
          module.airpods()
          return
