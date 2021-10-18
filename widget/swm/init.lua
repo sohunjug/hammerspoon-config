@@ -794,7 +794,7 @@ M.recache = function()
          table.remove(tmp, trackedWinIdx)
          table.insert(tmp, 1, win)
          -- window is "new" if it's not in cache at all, or if it changed space
-      elseif not trackedWinId or trackedSpaceIdx ~= _spaceIdx then
+      elseif not trackedWinId or trackedSpaceIdx ~= _spaceIdx or trackedScreenIdx ~= _screenIdx then
          -- table.insert(tmp, 1, win)
          table.insert(tmp, win)
       end
@@ -875,11 +875,11 @@ M.tiling = function()
          end
 
          if not existsOnScreen or duplicateIdx > 0 then
-            if spaceWindows[i] == win then
-               table.remove(spaceWindows, duplicateIdx)
-            else
-               table.remove(spaceWindows, i)
-            end
+            -- if spaceWindows[i] == win then
+            -- table.remove(spaceWindows, duplicateIdx)
+            -- else
+            table.remove(spaceWindows, duplicateIdx)
+            -- end
             -- table.remove(spaceWindows, duplicateIdx)
             -- i = i - 1
          else
@@ -996,7 +996,7 @@ M.detectSpace = function(win)
    return nil, nil
 end
 
-M.autoThrow = function(name, event, application)
+M.autoThrow = function(_, event, application)
    --[[ log.d(hs.inspect {
       name = name,
       event = event,
