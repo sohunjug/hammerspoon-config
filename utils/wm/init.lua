@@ -124,6 +124,7 @@ module.start = function(_)
       { app = "钉钉", title = "Window", role = "AXWindow", subrole = "AXStandardWindow", tile = false },
       { app = "微信", title = "聊天", role = "AXWindow", subrole = "AXStandardWindow", tile = true },
       { app = "微信", role = "AXWindow", subrole = "AXStandardWindow", tile = false },
+      { app = "odonate-desktop", tile = true, screen = "laptop", space = 1 },
       { title = "GVim", tile = true },
       { title = "Little Snitch Configuration", tile = true },
       { title = "Little Snitch Network Monitor", tile = false },

@@ -49,11 +49,15 @@ M.app2Ime = {
 M.app2flag = {}
 
 local function updateFocusAppInputMethod()
-   local win = hs.window.frontmostWindow():application()
-   if win == nil then
+   local win = hs.window.frontmostWindow()
+   if not win then
       return
    end
-   local focusAppPath = win:path()
+   local app = win:application()
+   if app == nil then
+      return
+   end
+   local focusAppPath = app:path()
    local choose = M.app2Ime[focusAppPath] and M.app2Ime[focusAppPath] or English()
    hs.keycodes.currentSourceID(choose)
 end

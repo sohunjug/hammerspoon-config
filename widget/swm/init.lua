@@ -745,6 +745,8 @@ M.recache = function()
 
    local allWindows = hs.window.allWindows()
 
+   -- log.d(hs.inspect(allWindows))
+
    hs.fnutils.each(allWindows or {}, function(win)
       -- we don't care about minimized or fullscreen windows
       if win:isMinimized() or win:isFullscreen() then
@@ -780,15 +782,16 @@ M.recache = function()
       local _screenIdx = getScreenIndex(win:screen())
       local _spaceIdx = getSpaceIndex(win)
       local tmp = ensureCacheSpaces(_screenIdx, _spaceIdx)
-      local trackedWinId, trackedSpaceIdx, _, _ = M.findTrackedWindow(win)
+      local trackedWinId, trackedSpaceIdx, trackedWinIdx, trackedScreenIdx = M.findTrackedWindow(win)
 
       if win:id() == cache.main[_screenIdx][_spaceIdx] then
-         local t = tmp
-         for index, _win in ipairs(t) do
-            if _win:id() == cache.main[_screenIdx][_spaceIdx] then
-               table.remove(tmp, index)
-            end
-         end
+         -- local t = tmp
+         -- for index, _win in ipairs(t) do
+         -- if _win:id() == cache.main[_screenIdx][_spaceIdx] then
+         -- table.remove(tmp, index)
+         -- end
+         -- end
+         table.remove(tmp, trackedWinIdx)
          table.insert(tmp, 1, win)
          -- window is "new" if it's not in cache at all, or if it changed space
       elseif not trackedWinId or trackedSpaceIdx ~= _spaceIdx then
@@ -826,9 +829,8 @@ end
 M.tile = function()
    if cache.timer then
       cache.timer:stop()
-   else
    end
-   cache.timer = hs.timer.doAfter(0.01, M.tiling)
+   cache.timer = hs.timer.doAfter(0.3, M.tiling)
    cache.timer:start()
 end
 
@@ -873,7 +875,13 @@ M.tiling = function()
          end
 
          if not existsOnScreen or duplicateIdx > 0 then
-            table.remove(spaceWindows, i)
+            if spaceWindows[i] == win then
+               table.remove(spaceWindows, duplicateIdx)
+            else
+               table.remove(spaceWindows, i)
+            end
+            -- table.remove(spaceWindows, duplicateIdx)
+            -- i = i - 1
          else
             i = i + 1
          end
@@ -898,6 +906,7 @@ M.tiling = function()
       if not layoutName or not layouts[layoutName] then
          log.e("layout doesn't exist: " .. layoutName)
       else
+         -- log.d(hs.inspect { spaceidx = spaceIdx, screenidx = screenIdx, wins = screenWindows })
          for index, window in pairs(screenWindows) do
             local frame = layouts[layoutName](
                window,
@@ -987,7 +996,7 @@ M.detectSpace = function(win)
    return nil, nil
 end
 
-M.autoThrow = function(_, event, application)
+M.autoThrow = function(name, event, application)
    --[[ log.d(hs.inspect {
       name = name,
       event = event,
