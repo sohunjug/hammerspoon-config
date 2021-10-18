@@ -835,7 +835,8 @@ M.tile = function()
    if cache.timer then
       cache.timer:stop()
    end
-   cache.timer = hs.timer.doAfter(0.3, M.tiling)
+   cache.timer = --hs.timer.doAfter(0.3, M.tiling)
+      hs.timer.delayed.new(0.2, M.tiling)
    cache.timer:start()
 end
 

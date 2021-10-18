@@ -32,15 +32,18 @@ M.connect = function(name)
       ]],
          { AIRPODS = name }
       ))
-      hs.timer.waitUntil(function()
-         return hs.audiodevice.findOutputByName(name)
-      end, function()
-         local audioDevice = hs.audiodevice.findOutputByName(name)
-         -- audioDevice:setDefaultEffectDevice()
-         audioDevice:setDefaultOutputDevice()
-         audioDevice:setDefaultInputDevice()
-         audioDevice:setMuted(false)
-      end)
+      hs.timer.delayed.new(
+         1,
+         hs.fnutils.partial(hs.timer.waitUntil, function()
+            return hs.audiodevice.findOutputByName(name)
+         end, function()
+            local audioDevice = hs.audiodevice.findOutputByName(name)
+            -- audioDevice:setDefaultEffectDevice()
+            audioDevice:setDefaultOutputDevice()
+            audioDevice:setDefaultInputDevice()
+            audioDevice:setMuted(false)
+         end)
+      ):start()
    else
       audiodevice:setDefaultOutputDevice()
       audiodevice:setDefaultInputDevice()
