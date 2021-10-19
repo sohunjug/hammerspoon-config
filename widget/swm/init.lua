@@ -270,15 +270,19 @@ M.getLayout = function(spaceId)
       return screen:spacesUUID() == foundScreenUUID
    end)
 
-   if cache.layouts[screenIdx] then
-      return cache.layouts[screenIdx][spaceIdx]
-         or (screen and M.displayLayouts and M.displayLayouts[screen:id()])
-         or (screen and M.displayLayouts and M.displayLayouts[screen:name()])
-         or "monocle"
-   end
-   return (screen and M.displayLayouts and M.displayLayouts[screen:id()])
-      or (screen and M.displayLayouts and M.displayLayouts[screen:name()])
+   local name = (screen and M.displayLayouts and M.displayLayouts[screen:id()] and M.displayLayouts[screen:id()])
+      or (screen and M.displayLayouts and M.displayLayouts[screen:name()] and M.displayLayouts[screen:name()][1])
       or "monocle"
+   if cache.layouts[screenIdx] then
+      local _name = cache.layouts[screenIdx][spaceIdx]
+         or (screen and M.displayLayouts and M.displayLayouts[screen:id()] and M.displayLayouts[screen:id()])
+         or (screen and M.displayLayouts and M.displayLayouts[screen:name()] and M.displayLayouts[screen:name()][1])
+         or "monocle"
+      if type(_name) == "string" then
+         name = _name
+      end
+   end
+   return name
 end
 
 -- resbuild cache.layouts table using provided hhtwm.displayLayouts and hhtwm.defaultLayout
@@ -737,6 +741,12 @@ local shouldFloat = function(win)
    return not M.detectTile(win)
 end
 
+M.ignore = {
+   "imklaunchagent",
+   "cn.com.10jqka.iHexinFee",
+   "com.macitbetter.betterzip.Quick-Look-Extension",
+}
+
 -- tile windows - combine caches with current state, and apply layout
 M.recache = function()
    -- this allows us to have tabs and do proper tiling!
@@ -762,7 +772,17 @@ M.recache = function()
          return
       end
 
-      if win:application():name() == "imklaunchagent" then
+      if hs.fnutils.find(M.ignore, function(name)
+         return win:application():name() == name
+      end) then
+         return
+      end
+
+      if
+         hs.fnutils.find(M.ignore, function(bundleID)
+            return win:application():bundleID() == bundleID
+         end)
+      then
          return
       end
 
@@ -843,7 +863,7 @@ end
 M.tiling = function()
    local currentSpaces = getCurrentSpacesIds()
 
-   -- local starttime = hs.timer.secondsSinceEpoch()
+   local starttime = hs.timer.secondsSinceEpoch()
    local tilingWindows = M.recache()
    -- clean up tiling cache
    hs.fnutils.each(currentSpaces, function(spaceId)
@@ -949,6 +969,7 @@ M.tiling = function()
       table.remove(cache.spaces[screenIdx][spaceIdx], winIdx)
       table.insert(cache.floating, win:id())
    end)
+   -- log.d(string.format("tiling took %.2fs", hs.timer.secondsSinceEpoch() - starttime))
 end
 
 -- tile detection:

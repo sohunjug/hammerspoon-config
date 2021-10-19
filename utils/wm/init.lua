@@ -152,7 +152,7 @@ module.start = function(_)
    hhtwm.screenMargin = screenMargin
    hhtwm.filters = filters
    -- hhtwm.calcResizeStep = calcResizeStep
-   hhtwm.displayLayouts = S_HS_CONFIG.wm.displayLayouts[activeScreen():name()]
+   hhtwm.displayLayouts = S_HS_CONFIG.wm.displayLayouts
    hhtwm.defaultLayout = "monocle"
 
    hhtwm.start()

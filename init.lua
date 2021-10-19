@@ -48,8 +48,8 @@ _G.S_HS_CONFIG = {
       displayLayouts = {
          ["Color LCD"] = { "monocle", "main-work" },
          ["Built-in Retina Display"] = { "monocle", "main-work" },
-         ["B2431M"] = { "monocle", "main-work", "tab-right", "main-center", "gp-vertical" },
-         ["LU28R55"] = { "monocle", "main-work", "tab-right", "main-center", "gp-vertical" },
+         ["B2431M"] = { "main-work", "monocle", "tab-right", "main-center", "gp-vertical" },
+         ["LU28R55"] = { "main-work", "monocle", "tab-right", "main-center", "gp-vertical" },
       },
    },
 
