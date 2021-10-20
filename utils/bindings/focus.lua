@@ -23,7 +23,7 @@ local focusAndHighlight = function(cmd)
    -- local windowsToFocus    = cache.focusFilter[winCmd](cache.focusFilter, focusedWindow, ONLY_FRONTMOST, STRICT_ANGLE)
    local windowsToFocus = focusedWindow[winCmd](focusedWindow, nil, ONLY_FRONTMOST, STRICT_ANGLE)
    local screenInDirection = focusedScreen[screenCmd](focusedScreen)
-   local filterWindows = cache.focusFilter:getWindows()
+   -- local filterWindows = cache.focusFilter:getWindows()
 
    local windowOnSameOrNextScreen = function(testWin, currentScreen, nextScreen)
       return testWin:screen():id() == currentScreen:id() or testWin:screen():id() == nextScreen:id()
@@ -53,8 +53,8 @@ local focusAndHighlight = function(cmd)
    elseif screenInDirection then
       focusScreen(screenInDirection)
       -- focus first window if there are any
-   elseif #filterWindows > 0 then
-      forceFocus(filterWindows[1])
+      -- elseif #filterWindows > 0 then
+      -- forceFocus(filterWindows[1])
       -- finally focus the screen if nothing else works
    else
       focusScreen(focusedScreen)
@@ -83,7 +83,7 @@ module.start = function()
    end
 
    highlightinit()
-   cache.focusFilter = hs.window.filter.new():setCurrentSpace(true):setDefaultFilter():keepActive()
+   -- cache.focusFilter = hs.window.filter.new():setCurrentSpace(true):setDefaultFilter():keepActive()
 
    hs.fnutils.each({
       { key = "h", cmd = "west" },

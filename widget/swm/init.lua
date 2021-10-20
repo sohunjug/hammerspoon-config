@@ -152,6 +152,9 @@ local getSpaceIdx = function(spaceId, uuid)
    end
    if uuid == nil then
       local screen = getScreenBySpaceId(spaceId)
+      if not screen then
+         return 0
+      end
       -- log.d(hs.inspect { screen = screen, spaceid = spaceId, uuid = uuid })
       uuid = screen:spacesUUID()
    end
@@ -161,7 +164,7 @@ local getSpaceIdx = function(spaceId, uuid)
          return idx
       end
    end
-   return spaceId
+   return 0
 end
 
 local getAllWindowsUsingSpaces = function()
@@ -288,6 +291,10 @@ end
 M.getLayout = function(spaceId)
    local spaceIdx = getSpaceIdx(spaceId)
    local screenIdx = getScreenIndex(spaceId)
+
+   if spaceIdx == 0 then
+      return "monocle"
+   end
 
    local layout = spaces.layout()
    local foundScreenUUID
@@ -915,6 +922,10 @@ M.tiling = function()
       local screenIdx = getScreenIndex(screen)
       local spaceIdx = getSpaceIdx(spaceId, screen:spacesUUID())
 
+      if spaceIdx == 0 then
+         return
+      end
+
       local spaceWindows = ensureCacheSpaces(screenIdx, spaceIdx)
 
       local checkDuplicate = function(windows)
@@ -977,6 +988,9 @@ M.tiling = function()
       local spaceIdx = getSpaceIdx(spaceId, screen:spacesUUID())
       local spaceWindows = ensureCacheSpaces(screenIdx, spaceIdx)
 
+      if spaceIdx == 0 then
+         return
+      end
       local screenWindows = hs.fnutils.filter(spaceWindows, function(win)
          return win:screen():id() == screen:id()
       end)

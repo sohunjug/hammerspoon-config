@@ -97,7 +97,7 @@ config.menubar.enabled = { "space" }
 
 -- bindings
 config.bindings.enabled = {
-   "ask-before-quit",
+   -- "ask-before-quit",
    -- "block-hide",
    -- "ctrl-esc",
    "focus",
@@ -117,7 +117,7 @@ hs.fnutils.each(modules, function(module)
    end
 end)
 
-config.bindings["ask-before-quit"].askBeforeQuitApps = S_HS_CONFIG.apps.browsers
+-- config.bindings["ask-before-quit"].askBeforeQuitApps = S_HS_CONFIG.apps.browsers
 -- config.watchers.urlevent.urlPreference = S_HS_CONFIG.apps.browsers
 config.bindings.global.apps = S_HS_CONFIG.apps
 -- start/stop modules
