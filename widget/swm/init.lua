@@ -112,6 +112,40 @@ local getSpaceIndex = function(win)
    return spaceId
 end
 
+local SKIP_APPS = {
+   ["com.apple.WebKit.WebContent"] = true,
+   ["com.apple.qtserver"] = true,
+   ["com.google.Chrome.helper"] = true,
+   ["org.pqrs.Karabiner-AXNotifier"] = true,
+   ["com.adobe.PDApp.AAMUpdatesNotifier"] = true,
+   ["com.adobe.csi.CS5.5ServiceManager"] = true,
+   ["com.mcafee.McAfeeReporter"] = true,
+   ["cn.com.10jqka.iHexinFee"] = true,
+   ["N/A"] = true,
+}
+
+local getAllWindows = function()
+   local r = {}
+   for _, app in ipairs(hs.application.runningApplications()) do
+      if app:kind() >= 0 then
+         local bid = app:bundleID() or "N/A" --just for safety; universalaccessd has no bundleid (but it's kind()==-1 anyway)
+         if bid == "com.apple.finder" then --exclude the desktop "window"
+            -- check the role explicitly, instead of relying on absent :id() - sometimes minimized windows have no :id() (El Cap Notes.app)
+            for _, w in ipairs(app:allWindows()) do
+               if w:role() == "AXWindow" then
+                  r[#r + 1] = w
+               end
+            end
+         elseif not SKIP_APPS[bid] then
+            for _, w in ipairs(app:allWindows()) do
+               r[#r + 1] = w
+            end
+         end
+      end
+   end
+   return r
+end
+
 local getSpaceIdx = function(spaceId, uuid)
    if spaceId == nil then
       return getSpaceIndex()
@@ -744,6 +778,7 @@ end
 M.ignore = {
    "imklaunchagent",
    "cn.com.10jqka.iHexinFee",
+   "com.surteesstudios.Bartender",
    "com.macitbetter.betterzip.Quick-Look-Extension",
 }
 
@@ -753,7 +788,16 @@ M.recache = function()
    local tilingWindows = {}
    local floatingWindows = {}
 
-   local allWindows = hs.window.allWindows()
+   local starttime = hs.timer.secondsSinceEpoch()
+   -- local allWindows = spaces.allWindowsForSpace(M.getSpaceId())
+   -- local allWindows = hs.window.visibleWindows()
+   -- local allWindows = hs.window.allWindows()
+   local allWindows = getAllWindows()
+   local usedTime = hs.timer.secondsSinceEpoch() - starttime
+   if usedTime > 0.3 then
+      log.d(string.format("recache took %.2fs", usedTime))
+   end
+   -- local allWindows = cache.filter:getWindows()
 
    -- log.d(hs.inspect(allWindows))
 
@@ -863,8 +907,8 @@ end
 M.tiling = function()
    local currentSpaces = getCurrentSpacesIds()
 
-   local starttime = hs.timer.secondsSinceEpoch()
    local tilingWindows = M.recache()
+   local starttime = hs.timer.secondsSinceEpoch()
    -- clean up tiling cache
    hs.fnutils.each(currentSpaces, function(spaceId)
       local screen = getScreenBySpaceId(spaceId)
@@ -961,7 +1005,10 @@ M.tiling = function()
          end
       end
    end)
-   -- log.d(string.format("tiling took %.2fs", hs.timer.secondsSinceEpoch() - starttime))
+   local usedTime = hs.timer.secondsSinceEpoch() - starttime
+   if usedTime > 0.3 then
+      log.d(string.format("tiling took %.2fs", usedTime))
+   end
 
    hs.fnutils.each(moveToFloat, function(win)
       local _, spaceIdx, winIdx, screenIdx = M.findTrackedWindow(win)
@@ -998,6 +1045,9 @@ M.detectTile = function(win)
       end)
 
       if foundMatch then
+         --[[ if foundMatch.tile and not cache.filter:isAppAllowed(app) then
+            cache.filter:allowApp(app)
+         end ]]
          return foundMatch.tile
       end
    end
@@ -1057,9 +1107,10 @@ M.autoThrow = function(_, event, application)
             M.throwToSpaceIdx(win, screenIdx, spaceIdx)
          end
       end
+      M.tile()
+   elseif event == hs.application.watcher.activated then
+      M.tile()
    end
-
-   M.tile()
 end
 
 -- mostly for debugging
@@ -1151,13 +1202,13 @@ local saveSettings = function()
 end
 
 M.start = function()
-   cache.filter = hs.window.filter.new():setDefaultFilter():setOverrideFilter {
+   --[[ cache.filter = hs.window.filter.new():setDefaultFilter():setOverrideFilter {
       visible = true, -- only allow visible windows
       -- fullscreen = false, -- ignore fullscreen windows
       currentSpace = true, -- only windows on current space
       allowRoles = { "AXStandardWindow", "AXWindow" },
       -- allowRoles = "*",
-   }
+   } ]]
 
    loadSettings()
 
@@ -1167,7 +1218,7 @@ M.start = function()
 
    cache.spaceWatcher = hs.spaces.watcher.new(M.tile)
 
-   cache.filter:subscribe({ hs.window.filter.windowMoved, hs.window.windowsChanged }, M.tile)
+   -- cache.filter:subscribe({ hs.window.filter.windowMoved, hs.window.windowsChanged }, M.tile)
 
    cache.spaceWatcher:start()
 
@@ -1183,7 +1234,7 @@ M.stop = function()
    saveSettings()
 
    -- stop filter
-   cache.filter:unsubscribeAll()
+   -- cache.filter:unsubscribeAll()
 
    M.screenWatcher:stop()
 
