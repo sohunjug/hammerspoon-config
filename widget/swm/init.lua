@@ -209,6 +209,9 @@ local getScreenIndex = function(screenOrSpaceId)
    if type(screenOrSpaceId) == "number" then
       screenOrSpaceId = getScreenBySpaceId(screenOrSpaceId)
    end
+   if not screenOrSpaceId then
+      return M.defaultLayout
+   end
 
    return M.screen[screenOrSpaceId:name()] or screenOrSpaceId:name()
 end
@@ -907,7 +910,7 @@ M.tile = function()
       cache.timer:stop()
    end
    cache.timer = --hs.timer.doAfter(0.3, M.tiling)
-      hs.timer.delayed.new(0.2, M.tiling)
+      hs.timer.delayed.new(0.05, M.tiling)
    cache.timer:start()
 end
 

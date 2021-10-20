@@ -20,7 +20,7 @@ local notify = function(text)
    hs.alert.show(text)
 end
 
-local screenWatcher = function(_, _, _, prevScreens, screens)
+--[[ local screenWatcher = function(_, _, _, prevScreens, screens)
    if prevScreens == nil or #prevScreens == 0 then
       return
    end
@@ -34,7 +34,7 @@ local screenWatcher = function(_, _, _, prevScreens, screens)
    hhtwm.displayLayouts = S_HS_CONFIG.wm.defaultDisplayLayouts
    hhtwm.resetLayouts()
    hhtwm.tile()
-end
+end ]]
 
 --[[ local calcResizeStep = function(screen)
    return 1 / hs.grid.getGrid(screen).w
@@ -72,7 +72,7 @@ module.switcherLayout = function(layout)
 end
 
 module.start = function(_)
-   cache.watcher = hs.watchable.watch("status.connectedScreenIds", screenWatcher)
+   -- cache.watcher = hs.watchable.watch("status.connectedScreenIds", screenWatcher)
 
    local screenAlias = {
       ["LU28R55"] = "primary",
