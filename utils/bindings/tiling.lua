@@ -208,7 +208,7 @@ module.start = function()
    end)
 
    -- [c]enter window
-   bind("c", function()
+   --[[ bind("c", function()
       local win = hs.window.frontmostWindow()
 
       if not hhtwm.isFloating(win) then
@@ -218,7 +218,7 @@ module.start = function()
       -- win:centerOnScreen()
       hs.grid.center(win)
       highlightWindow()
-   end)
+   end) ]]
 
    -- toggle [z]oom window
    bind("z", function()

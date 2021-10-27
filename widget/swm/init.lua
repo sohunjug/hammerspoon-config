@@ -5,6 +5,7 @@ local spaces = require "hs._asm.undocumented.spaces"
 
 local cache = { spaces = {}, layouts = {}, floating = {}, layoutOptions = {}, main = {} }
 local M = { cache = cache, screen = {} }
+local tilingLock = false
 
 local layouts = defaultLayouts(M)
 local log = hs.logger.new("swm", "debug")
@@ -346,6 +347,7 @@ M.clear = function()
    local spaceIdx = getSpaceIndex()
    local screenIdx = getScreenIndex()
    cache.spaces[screenIdx][spaceIdx] = {}
+   cache.main[screenIdx][spaceIdx] = nil
 
    M.tile()
 end
@@ -609,15 +611,22 @@ M.throwToSpaceIdx = function(win, screenIdx, spaceIdx)
 
    if M.isFloating(win) then
       -- adjust frame for new screen offset
-      local newX = win:frame().x - win:screen():frame().x + targetScreen:frame().x
-      local newY = win:frame().y - win:screen():frame().y + targetScreen:frame().y
+      local newX = win:frame().x - win:screen():frame().x + targetScreenFrame.x
+      local newY = win:frame().y - win:screen():frame().y + targetScreenFrame.y
 
       -- move to space
       spaces.moveWindowToSpace(win:id(), spaceId)
 
-      spaces.changeToSpace(spaceId, false)
+      if targetScreen:name() ~= win:screen():name() then
+         newX = targetScreenFrame.x
+         newY = targetScreenFrame.y
+
+         win:setTopLeft(newX, newY)
+      else
+         win:setTopLeft(newX, newY)
+         spaces.changeToSpace(spaceId, false)
+      end
       -- ensure window is visible
-      win:setTopLeft(newX, newY)
 
       return true
    end
@@ -906,7 +915,7 @@ M.recache = function()
 end
 
 M.tile = function()
-   if cache.timer then
+   if cache.timer and not tilingLock then
       cache.timer:stop()
    end
    cache.timer = --hs.timer.doAfter(0.3, M.tiling)
@@ -915,6 +924,11 @@ M.tile = function()
 end
 
 M.tiling = function()
+   if not tilingLock then
+      tilingLock = true
+   else
+      return
+   end
    local currentSpaces = getCurrentSpacesIds()
 
    local tilingWindows = M.recache()
@@ -922,6 +936,9 @@ M.tiling = function()
    -- clean up tiling cache
    hs.fnutils.each(currentSpaces, function(spaceId)
       local screen = getScreenBySpaceId(spaceId)
+      if not screen then
+         return
+      end
       local screenIdx = getScreenIndex(screen)
       local spaceIdx = getSpaceIdx(spaceId, screen:spacesUUID())
 
@@ -1033,6 +1050,7 @@ M.tiling = function()
       table.remove(cache.spaces[screenIdx][spaceIdx], winIdx)
       table.insert(cache.floating, win:id())
    end)
+   tilingLock = false
    -- log.d(string.format("tiling took %.2fs", hs.timer.secondsSinceEpoch() - starttime))
 end
 
@@ -1121,6 +1139,12 @@ M.autoThrow = function(_, event, application)
          local screenIdx, spaceIdx = M.detectSpace(win)
          -- log.d(hs.inspect { name = name, screen = screenIdx, space = spaceIdx })
          if screenIdx and spaceIdx then
+            --[[ local screen = hs.fnutils.find(hs.screen.allScreens(), function(s)
+               return getScreenIndex(s) == screenIdx
+            end)
+            if screen:name() ~= win:screen():name() then
+               spaces.moveWindowToSpace()
+            end ]]
             M.throwToSpaceIdx(win, screenIdx, spaceIdx)
          end
       end
@@ -1233,11 +1257,11 @@ M.start = function()
 
    cache.appWatcher = hs.application.watcher.new(M.autoThrow)
 
-   cache.spaceWatcher = hs.spaces.watcher.new(M.tile)
+   -- cache.spaceWatcher = hs.spaces.watcher.new(M.tile)
 
    -- cache.filter:subscribe({ hs.window.filter.windowMoved, hs.window.windowsChanged }, M.tile)
 
-   cache.spaceWatcher:start()
+   -- cache.spaceWatcher:start()
 
    M.screenWatcher:start()
 
@@ -1255,7 +1279,7 @@ M.stop = function()
 
    M.screenWatcher:stop()
 
-   cache.spaceWatcher:stop()
+   -- cache.spaceWatcher:stop()
 
    cache.appWatcher:stop()
 end

@@ -159,7 +159,7 @@ module.start = function(_)
 end
 
 module.stop = function()
-   cache.watcher:release()
+   -- cache.watcher:release()
    hhtwm.stop()
 end
 

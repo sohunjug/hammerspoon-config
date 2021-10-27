@@ -8,9 +8,15 @@ M.action = function(_, event, application)
    if not win or win:isFullScreen() then
       return
    end
-   if event == hs.application.watcher.activated then
+   if
+      event == hs.application.watcher.activated
+      or event == hs.application.watcher.deactivated
+      or event == hs.application.watcher.terminated
+      or event == hs.application.watcher.hidden
+   then
       drawBorder()
    end
+   drawBorder()
 end
 
 M.start = function()
