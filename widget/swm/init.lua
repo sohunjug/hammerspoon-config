@@ -919,7 +919,7 @@ M.tile = function()
       cache.timer:stop()
    end
    cache.timer = --hs.timer.doAfter(0.3, M.tiling)
-      hs.timer.delayed.new(0.05, M.tiling)
+      hs.timer.delayed.new(0.1, M.tiling)
    cache.timer:start()
 end
 
