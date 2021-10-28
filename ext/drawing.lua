@@ -47,7 +47,7 @@ module.drawBorder = function()
       focusedWindow:application():path(),
       focusedWindow:application():kind(),
       hs.inspect(focusedWindow:application():allWindows()),
-      require("hhtwm").isFloating(focusedWindow)
+      require("widget.swm").isFloating(focusedWindow)
    ) ]]
    local alpha = 0.6
    local borderWidth = 4

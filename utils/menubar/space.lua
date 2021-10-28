@@ -1,5 +1,5 @@
 local M = {}
-local hhtwm = require "hhtwm"
+local hhtwm = require "widget.swm"
 local spaces = require "hs._asm.undocumented.spaces"
 
 local num = {

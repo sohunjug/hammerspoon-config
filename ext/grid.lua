@@ -1,5 +1,5 @@
 local cache = {}
-local hhtwm = require "hhtwm"
+local hhtwm = require "widget.swm"
 local module = { cache = cache }
 
 module.toggleGrid = function()
