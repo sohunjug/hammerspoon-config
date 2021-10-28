@@ -865,7 +865,7 @@ M.recache = function()
       local _screenIdx = getScreenIndex(win:screen())
       local _spaceIdx = getSpaceIndex(win)
       local tmp = ensureCacheSpaces(_screenIdx, _spaceIdx)
-      local trackedWinId, trackedSpaceIdx, _, trackedScreenIdx = M.findTrackedWindow(win)
+      local trackedWinId, trackedSpaceIdx, trackedWinIdx, trackedScreenIdx = M.findTrackedWindow(win)
 
       if win:id() == cache.main[_screenIdx][_spaceIdx] then
          -- local t = tmp
@@ -884,7 +884,21 @@ M.recache = function()
          -- window is "new" if it's not in cache at all, or if it changed space
       elseif not trackedWinId or trackedSpaceIdx ~= _spaceIdx or trackedScreenIdx ~= _screenIdx then
          -- table.insert(tmp, 1, win)
+         --[[ log.d(hs.inspect {
+            trackedScreenIdx = trackedScreenIdx,
+            trackedWinId = trackedWinId,
+            trackedSpaceIdx = trackedScreenIdx,
+            winid = win:id(),
+            winSpaceIdx = _spaceIdx,
+            winScreeIdx = _screenIdx,
+            winname = win:application():name(),
+            wintitle = win:title(),
+            screen = win:screen(),
+         }) ]]
          table.insert(tmp, win)
+         if trackedScreenIdx and trackedSpaceIdx then
+            table.remove(cache.spaces[trackedScreenIdx][trackedSpaceIdx], trackedWinIdx)
+         end
       end
 
       cache.spaces[_screenIdx][_spaceIdx] = tmp
@@ -919,16 +933,16 @@ M.tile = function()
       cache.timer:stop()
    end
    cache.timer = --hs.timer.doAfter(0.3, M.tiling)
-      hs.timer.delayed.new(0.1, M.tiling)
+      hs.timer.delayed.new(0.05, M.tiling)
    cache.timer:start()
 end
 
 M.tiling = function()
-   if not tilingLock then
+   --[[ if not tilingLock then
       tilingLock = true
    else
       return
-   end
+   end ]]
    local currentSpaces = getCurrentSpacesIds()
 
    local tilingWindows = M.recache()
@@ -978,11 +992,11 @@ M.tiling = function()
 
             if not existsOnScreen or duplicateIdx > 0 then
                -- if spaceWindows[i] == win then
-               table.remove(windows, i)
-               if duplicateIdx > 0 then
+               table.remove(spaceWindows, i)
+               --[[ if duplicateIdx > 0 then
                   table.remove(spaceWindows, duplicateIdx)
-               end
-               return true
+               end ]]
+               -- return true
                -- else
                -- end
                -- table.remove(spaceWindows, duplicateIdx)
@@ -994,8 +1008,9 @@ M.tiling = function()
          return false
       end
 
-      while checkDuplicate(spaceWindows) do
-      end
+      -- while checkDuplicate(spaceWindows) do
+      -- end
+      checkDuplicate(spaceWindows)
 
       cache.spaces[screenIdx][spaceIdx] = spaceWindows
    end)
@@ -1050,7 +1065,7 @@ M.tiling = function()
       table.remove(cache.spaces[screenIdx][spaceIdx], winIdx)
       table.insert(cache.floating, win:id())
    end)
-   tilingLock = false
+   -- tilingLock = false
    -- log.d(string.format("tiling took %.2fs", hs.timer.secondsSinceEpoch() - starttime))
 end
 
@@ -1148,10 +1163,10 @@ M.autoThrow = function(_, event, application)
             M.throwToSpaceIdx(win, screenIdx, spaceIdx)
          end
       end
-      M.tile()
-   elseif event == hs.application.watcher.activated then
-      M.tile()
+      -- M.tile()
+      -- elseif event == hs.application.watcher.activated then
    end
+   M.tile()
 end
 
 -- mostly for debugging
