@@ -13,7 +13,8 @@ M.update = function(energy)
       -- M.menubar:priority(hs.menubar.priorities["default"])
    end
 
-   local disp_str = string.format("%.1fｗ", energy)
+   local watt = "ｗ"
+   local disp_str = string.format("%.1f%s", energy / 1000, watt)
    local disp = hs.styledtext.new {
       disp_str,
       {
@@ -34,7 +35,16 @@ end
 M.monitor = function(_, out, _)
    -- log.d(hs.inspect(hs.plist.readString(out)))
    local data = hs.plist.readString(out)
-   M.energy = M.energy * 0.8 + data.processor.package_energy * 0.2
+   local energy = data.processor.package_energy
+      + data.processor.cpu_energy
+      + data.processor.ane_energy
+      + data.processor.gpu_energy
+      + data.processor.dram_energy
+   if not M.energy then
+      M.energy = energy
+   else
+      M.energy = M.energy * 0.8 + energy * 0.2
+   end
    M.update(M.energy)
    return true
 end
@@ -43,7 +53,7 @@ M.task = function()
    hs.task.new(
       "/usr/bin/sudo",
       M.monitor,
-      { "/usr/bin/powermetrics", "-f", "plist", "-i", "1", "-n", "1", "-s", "cpu_power" }
+      { "/usr/bin/powermetrics", "-f", "plist", "-i", "1000", "-n", "1", "-s", "cpu_power" }
    ):start()
 end
 
