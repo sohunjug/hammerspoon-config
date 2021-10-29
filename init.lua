@@ -86,7 +86,11 @@ end)
 config.controlplane.enabled = {}
 
 -- watchers
-config.watchers.enabled = { "ime", "autoborder" }
+config.watchers.enabled = {
+   "power",
+   "ime",
+   "autoborder",
+}
 
 if hs.host.localizedName() == "sohunjug-MacBookAir" then
    table.insert(config.watchers.enabled, "urlevent")

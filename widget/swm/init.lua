@@ -1020,6 +1020,9 @@ M.tiling = function()
    hs.fnutils.each(currentSpaces, function(spaceId)
       local screen = getScreenBySpaceId(spaceId)
       local screenIdx = getScreenIndex(screen)
+      if not screen then
+         return
+      end
       local spaceIdx = getSpaceIdx(spaceId, screen:spacesUUID())
       local spaceWindows = ensureCacheSpaces(screenIdx, spaceIdx)
 
