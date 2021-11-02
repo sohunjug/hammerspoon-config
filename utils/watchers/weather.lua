@@ -1,7 +1,6 @@
-local urlApi = "https://www.tianqiapi.com/api?version="
+local urlApi = "https://tianqiapi.com/api?version="
 local auth = "&appid=95116734&appsecret=S5bhUM3T"
 local cache = {}
-local log = hs.logger.new("weather", "debug")
 local M = { cache = cache }
 M.menubar = hs.menubar.new()
 M.menuData = {}
@@ -35,7 +34,7 @@ function M:getWeatherFromIP(ip)
    if ip == nil then
       return
    end
-   hs.http.doAsyncRequest(urlApi .. "v61" .. auth .. "&ip=" .. ip, "GET", nil, nil, function(code, body, _)
+   hs.http.doAsyncRequest(urlApi .. "v6" .. auth .. "&ip=" .. ip, "GET", nil, nil, function(code, body, _)
       if code ~= 200 then
          print("get weather error:" .. code)
          return
@@ -99,7 +98,7 @@ function M:getWeatherFromName(name)
    if type(name) ~= "string" then
       return
    end
-   hs.http.doAsyncRequest(urlApi .. "v61" .. auth .. "&cityid=" .. name, "GET", nil, nil, function(code, body, htable)
+   hs.http.doAsyncRequest(urlApi .. "v6" .. auth .. "&cityid=" .. name, "GET", nil, nil, function(code, body, htable)
       if code ~= 200 then
          print("get " .. name .. " weather error:" .. code)
          print(urlApi .. "v61" .. auth .. "&cityid=" .. name)
@@ -120,7 +119,6 @@ function M:getWeatherFromName(name)
          msg.win_speed,
          msg.wea
       )
-      log.d(titlestr)
       local item = { title = titlestr }
       hs.http.doAsyncRequest(urlApi .. "v1" .. auth .. "&cityid=" .. name, "GET", nil, nil, function(scode, sbody, _)
          if scode ~= 200 then
