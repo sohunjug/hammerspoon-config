@@ -113,7 +113,7 @@ local getSpaceIndex = function(win)
    return spaceId
 end
 
-local SKIP_APPS = {
+local SKIP_BUNDLES = {
    ["com.apple.WebKit.WebContent"] = true,
    ["com.apple.qtserver"] = true,
    ["com.google.Chrome.helper"] = true,
@@ -122,24 +122,31 @@ local SKIP_APPS = {
    ["com.adobe.csi.CS5.5ServiceManager"] = true,
    ["com.mcafee.McAfeeReporter"] = true,
    ["cn.com.10jqka.iHexinFee"] = true,
-   ["N/A"] = true,
+   -- ["N/A"] = true,
+}
+
+local SKIP_APPS = {
+   ["imklaunchagent"] = true,
 }
 
 local getAllWindows = function()
    local r = {}
    for _, app in ipairs(hs.application.runningApplications()) do
       if app:kind() >= 0 then
+         local name = app:name()
          local bid = app:bundleID() or "N/A" --just for safety; universalaccessd has no bundleid (but it's kind()==-1 anyway)
-         if bid == "com.apple.finder" then --exclude the desktop "window"
-            -- check the role explicitly, instead of relying on absent :id() - sometimes minimized windows have no :id() (El Cap Notes.app)
-            for _, w in ipairs(app:allWindows()) do
-               if w:role() == "AXWindow" then
+         if not SKIP_APPS[name] then
+            if bid == "com.apple.finder" then --exclude the desktop "window"
+               -- check the role explicitly, instead of relying on absent :id() - sometimes minimized windows have no :id() (El Cap Notes.app)
+               for _, w in ipairs(app:allWindows()) do
+                  if w:role() == "AXWindow" then
+                     r[#r + 1] = w
+                  end
+               end
+            elseif not SKIP_BUNDLES[bid] then
+               for _, w in ipairs(app:allWindows()) do
                   r[#r + 1] = w
                end
-            end
-         elseif not SKIP_APPS[bid] then
-            for _, w in ipairs(app:allWindows()) do
-               r[#r + 1] = w
             end
          end
       end
@@ -1085,11 +1092,10 @@ M.detectTile = function(win)
    if M.filters then
       local foundMatch = hs.fnutils.find(M.filters, function(obj)
          local appMatches = ternary(obj.app ~= nil and app ~= nil, string.match(app, obj.app or ""), true)
-         local bundleMatches = ternary(
-            obj.bundle ~= nil and bundle ~= nil,
-            string.match(bundle, obj.bundle or ""),
-            true
-         )
+         local bundleMatches = false
+         if bundle then
+            bundleMatches = ternary(obj.bundle ~= nil and bundle ~= nil, string.match(bundle, obj.bundle or ""), true)
+         end
          local titleMatches = ternary(obj.title ~= nil and title ~= nil, string.match(title, obj.title or ""), true)
          local roleMatches = ternary(obj.role ~= nil, obj.role == role, true)
          local subroleMatches = ternary(obj.subrole ~= nil, obj.subrole == subrole, true)
@@ -1119,11 +1125,10 @@ M.detectSpace = function(win)
    if M.filters then
       local foundMatch = hs.fnutils.find(M.filters, function(obj)
          local appMatches = ternary(obj.app ~= nil and app ~= nil, string.match(app, obj.app or ""), true)
-         local bundleMatches = ternary(
-            obj.bundle ~= nil and bundle ~= nil,
-            string.match(bundle, obj.bundle or ""),
-            true
-         )
+         local bundleMatches = false
+         if bundle then
+            bundleMatches = ternary(obj.bundle ~= nil and bundle ~= nil, string.match(bundle, obj.bundle or ""), true)
+         end
          local titleMatches = ternary(obj.title ~= nil and title ~= nil, string.match(title, obj.title or ""), true)
          local roleMatches = ternary(obj.role ~= nil, obj.role == role, true)
          local subroleMatches = ternary(obj.subrole ~= nil, obj.subrole == subrole, true)
