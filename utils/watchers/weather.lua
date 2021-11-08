@@ -86,10 +86,14 @@ function M:getWeatherFromIP(ip)
             table.insert(menu, sitem)
          end
          item = { title = titlestr, menu = menu }
-         self.menuData[city] = item
+         if city then
+            self.menuData[city] = item
+         end
          self:updateMenubar()
       end)
-      self.menuData[city] = item
+      if city then
+         self.menuData[city] = item
+      end
       self:updateMenubar()
    end)
 end
@@ -153,10 +157,14 @@ function M:getWeatherFromName(name)
             table.insert(menu, sitem)
          end
          item = { title = titlestr, menu = menu }
-         self.menuData[city] = item
+         if city then
+            self.menuData[city] = item
+         end
          self:updateMenubar()
       end)
-      self.menuData[city] = item
+      if city then
+         self.menuData[city] = item
+      end
       self:updateMenubar()
    end)
 end

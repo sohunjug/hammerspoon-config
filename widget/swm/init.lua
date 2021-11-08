@@ -122,16 +122,20 @@ local SKIP_BUNDLES = {
    ["com.adobe.csi.CS5.5ServiceManager"] = true,
    ["com.mcafee.McAfeeReporter"] = true,
    ["cn.com.10jqka.iHexinFee"] = true,
+   ["com.mschrage.fig"] = true,
    -- ["N/A"] = true,
 }
 
 local SKIP_APPS = {
    ["imklaunchagent"] = true,
+   ["fig"] = true,
 }
 
 local getAllWindows = function()
    local r = {}
    for _, app in ipairs(hs.application.runningApplications()) do
+      local starttime = hs.timer.secondsSinceEpoch()
+
       if app:kind() >= 0 then
          local name = app:name()
          local bid = app:bundleID() or "N/A" --just for safety; universalaccessd has no bundleid (but it's kind()==-1 anyway)
@@ -149,6 +153,17 @@ local getAllWindows = function()
                end
             end
          end
+      end
+
+      local usedTime = hs.timer.secondsSinceEpoch() - starttime
+      if usedTime > 1 then
+         -- log.d(string.format("win took %.2fs", usedTime))
+         log.d(hs.inspect {
+            took = usedTime,
+            name = app:name(),
+            bundle = app:bundleID() or "N/A",
+            win = app:allWindows(),
+         })
       end
    end
    return r
@@ -938,22 +953,29 @@ end
 M.tile = function()
    if cache.timer and not tilingLock then
       cache.timer:stop()
+   elseif cache.timer and tilingLock then
+      return
    end
-   cache.timer = --hs.timer.doAfter(0.3, M.tiling)
+   cache.timer = --hs.timer.doAfter(1.3, M.tiling)
       hs.timer.delayed.new(0.05, M.tiling)
    cache.timer:start()
 end
 
 M.tiling = function()
-   --[[ if not tilingLock then
+   if not tilingLock then
       tilingLock = true
    else
       return
-   end ]]
+   end
    local currentSpaces = getCurrentSpacesIds()
 
-   local tilingWindows = M.recache()
    local starttime = hs.timer.secondsSinceEpoch()
+   local tilingWindows = M.recache()
+   local usedTime = hs.timer.secondsSinceEpoch() - starttime
+   if usedTime > 0.3 then
+      log.d(string.format("tiling recache took %.2fs", usedTime))
+   end
+   starttime = hs.timer.secondsSinceEpoch()
    -- clean up tiling cache
    hs.fnutils.each(currentSpaces, function(spaceId)
       local screen = getScreenBySpaceId(spaceId)
@@ -1064,7 +1086,7 @@ M.tiling = function()
          end
       end
    end)
-   local usedTime = hs.timer.secondsSinceEpoch() - starttime
+   usedTime = hs.timer.secondsSinceEpoch() - starttime
    if usedTime > 0.3 then
       log.d(string.format("tiling took %.2fs", usedTime))
    end
@@ -1075,7 +1097,7 @@ M.tiling = function()
       table.remove(cache.spaces[screenIdx][spaceIdx], winIdx)
       table.insert(cache.floating, win:id())
    end)
-   -- tilingLock = false
+   tilingLock = false
    -- log.d(string.format("tiling took %.2fs", hs.timer.secondsSinceEpoch() - starttime))
 end
 
