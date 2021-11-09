@@ -950,14 +950,17 @@ M.recache = function()
    return tilingWindows
 end
 
-M.tile = function()
+M.tile = function(sec)
    if cache.timer and not tilingLock then
       cache.timer:stop()
    elseif cache.timer and tilingLock then
       return
    end
+   if not sec then
+      sec = 0.05
+   end
    cache.timer = --hs.timer.doAfter(1.3, M.tiling)
-      hs.timer.delayed.new(0.05, M.tiling)
+      hs.timer.delayed.new(sec, M.tiling)
    cache.timer:start()
 end
 
@@ -1193,10 +1196,11 @@ M.autoThrow = function(_, event, application)
             M.throwToSpaceIdx(win, screenIdx, spaceIdx)
          end
       end
-      -- M.tile()
+      M.tile()
+      return
       -- elseif event == hs.application.watcher.activated then
    end
-   M.tile()
+   M.tile(1)
 end
 
 -- mostly for debugging
@@ -1298,7 +1302,7 @@ M.start = function()
 
    loadSettings()
 
-   M.screenWatcher = hs.screen.watcher.newWithActiveScreen(M.tile)
+   M.screenWatcher = hs.screen.watcher.newWithActiveScreen(hs.fnutils.partial(M.tile, 1))
 
    cache.appWatcher = hs.application.watcher.new(M.autoThrow)
 
