@@ -53,7 +53,7 @@ M.task = function()
    hs.task.new(
       "/usr/bin/sudo",
       M.monitor,
-      { "/usr/bin/powermetrics", "-f", "plist", "-i", "4000", "-n", "1", "-s", "cpu_power" }
+      { "/usr/bin/powermetrics", "-f", "plist", "-i", "1010", "-n", "1", "-s", "cpu_power" }
    ):start()
 end
 
