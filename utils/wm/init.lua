@@ -1,8 +1,8 @@
 local activeScreen = require("ext.screen").activeScreen
-local table = require "ext.table"
+-- local table = require "ext.table"
 local hhtwm = require "widget.swm"
 -- local hhtwm = require "hhtwm"
-local log = hs.logger.new("wm", "debug")
+-- local log = hs.logger.new("wm", "debug")
 
 local cache = { hhtwm = hhtwm }
 local module = { cache = cache }
@@ -83,6 +83,7 @@ module.start = function(_)
    local filters = {
       { app = "Alacritty", tile = true },
       { app = "AppCleaner", tile = false },
+      { app = "uTools", tile = false },
       { app = "Application Loader", tile = true },
       { app = "Archive Utility", tile = false },
       { app = "DiskImages UI Agent", tile = false },
@@ -110,7 +111,7 @@ module.start = function(_)
       { app = "Viscosity", tile = false },
       { app = "iTerm2", subrole = "AXDialog", tile = false },
       { app = "向日葵远程控制", tile = false, screen = "primary", space = 5 },
-      { app = "Maipo", tile = false,  },
+      { app = "Maipo", tile = false },
       -- { app = "信息", tile = false },
       { app = "QQ音乐", tile = false, screen = "laptop", space = 1 },
       { app = "腾讯会议", tile = false, screen = "laptop", space = 1 },

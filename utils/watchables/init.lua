@@ -65,7 +65,7 @@ module.start = function(config)
    -- start watchers
    cache.watchers = {
       -- battery = hs.battery.watcher.new(updateBattery):start(),
-      screen = hs.screen.watcher.new(updateScreen):start(),
+      -- screen = hs.screen.watcher.new(updateScreen):start(),
       sleep = hs.caffeinate.watcher.new(updateSleep):start(),
       -- usb = hs.usb.watcher.new(updateUSB):start(),
       -- network = cache.configuration:monitorKeys({ VPN_CONFIG_KEY, NETWORK_SHARING }):setCallback(updateNetwork):start(),
@@ -74,7 +74,7 @@ module.start = function(config)
 
    -- setup on start
    -- updateBattery()
-   updateScreen()
+   -- updateScreen()
    updateSleep()
    -- updateUSB()
    -- updateNetwork()

@@ -123,6 +123,7 @@ local SKIP_BUNDLES = {
    ["com.mcafee.McAfeeReporter"] = true,
    ["cn.com.10jqka.iHexinFee"] = true,
    ["com.mschrage.fig"] = true,
+   ["com.sudo-prompt"] = true,
    -- ["N/A"] = true,
 }
 
