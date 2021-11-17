@@ -845,6 +845,12 @@ M.recache = function()
 
    hs.fnutils.each(allWindows or {}, function(win)
       -- we don't care about minimized or fullscreen windows
+      if not win then
+         return
+      end
+      if not win:application() then
+         return
+      end
       if win:isMinimized() or win:isFullscreen() then
          return
       end
@@ -1109,6 +1115,9 @@ end
 -- 1. test tiling.filters if exist
 -- 2. check if there's fullscreen button -> yes = tile, no = float
 M.detectTile = function(win)
+   if not win then
+      return
+   end
    local app = win:application():name()
    local bundle = win:application():bundleID()
    local role = win:role()
