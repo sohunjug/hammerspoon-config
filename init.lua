@@ -30,7 +30,7 @@ require("hs.hotkey").setLogLevel "warning"
 local modules = { "bindings", "controlplane", "watchables", "watchers", "wm", "menubar" }
 -- global config
 _G.S_HS_CONFIG = {
-   airpods = "向阳的AirPods",
+   airpods = "sohunjug's AirPods",
    apps = {
       terms = { "Kitty", "iTerm2", "Termianl", "终端" },
       nvim = { "Alacritty" },
