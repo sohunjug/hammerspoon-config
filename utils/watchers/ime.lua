@@ -2,11 +2,11 @@ local cache = {}
 local M = { cache = cache }
 
 local function Chinese()
-   -- return "com.sogou.inputmethod.sogou.pinyin"
+   return "com.sogou.inputmethod.sogou.pinyin"
    -- hs.keycodes.currentSourceID("com.sogou.inputmethod.sogou.pinyin")
    -- hs.keycodes.currentSourceID("im.rime.inputmethod.Squirrel.Rime")
    -- hs.keycodes.currentSourceID("com.apple.inputmethod.SCIM.ITABC")
-   return "com.apple.inputmethod.SCIM.ITABC"
+   -- return "com.apple.inputmethod.SCIM.ITABC"
 end
 
 local function English()

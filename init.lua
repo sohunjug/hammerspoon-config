@@ -87,7 +87,7 @@ config.controlplane.enabled = {}
 
 -- watchers
 config.watchers.enabled = {
-   "power",
+   -- "power",
    "weather",
    -- "message",
    -- "network",

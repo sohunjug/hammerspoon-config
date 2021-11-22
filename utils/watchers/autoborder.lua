@@ -21,19 +21,19 @@ end
 
 M.start = function()
    cache.watcher = hs.application.watcher.new(M.action)
-   --[[ cache.filter = hs.window.filter.new():setCurrentSpace(true):setDefaultFilter():setOverrideFilter {
+   cache.filter = hs.window.filter.new():setCurrentSpace(true):setDefaultFilter():setOverrideFilter {
       fullscreen = false,
       allowRoles = { "AXStandardWindow" },
-   } ]]
+   }
 
-   -- cache.filter:subscribe({
-   -- hs.window.filter.windowCreated,
-   -- hs.window.filter.windowDestroyed,
-   -- hs.window.filter.windowsChanged,
-   -- hs.window.filter.windowMoved,
-   -- hs.window.filter.windowFocused,
-   -- hs.window.filter.windowUnfocused,
-   -- }, drawBorder)
+   cache.filter:subscribe({
+      hs.window.filter.windowCreated,
+      hs.window.filter.windowDestroyed,
+      hs.window.filter.windowsChanged,
+      hs.window.filter.windowMoved,
+      hs.window.filter.windowFocused,
+      hs.window.filter.windowUnfocused,
+   }, drawBorder)
    cache.watcher:start()
 
    drawBorder()
@@ -41,7 +41,7 @@ end
 
 M.stop = function()
    cache.watcher:stop()
-   -- cache.filter:unsubscribeAll()
+   cache.filter:unsubscribeAll()
 end
 
 return M

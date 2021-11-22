@@ -848,9 +848,6 @@ M.recache = function()
       if not win then
          return
       end
-      if not win:application() then
-         return
-      end
       if win:isMinimized() or win:isFullscreen() then
          return
       end
@@ -863,6 +860,12 @@ M.recache = function()
       if win:subrole() == "AXUnknown" then
          return
       end
+
+      local app = win:application()
+      if not app then
+         return
+      end
+      local name = app:name()
 
       if hs.fnutils.find(M.ignore, function(name)
          return win:application():name() == name
@@ -1116,6 +1119,9 @@ end
 -- 2. check if there's fullscreen button -> yes = tile, no = float
 M.detectTile = function(win)
    if not win then
+      return
+   end
+   if not win:application() then
       return
    end
    local app = win:application():name()
