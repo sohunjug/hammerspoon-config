@@ -207,7 +207,7 @@ return function(swm)
       local margin = swm.margin or 0
       local insetFrame = getInsetFrame(screen)
 
-      if layoutOptions.mainPaneRatio == 0.5 then
+      if layoutOptions.mainPaneRatio <= 0.45 then
          layoutOptions.mainPaneRatio = 0.56
       end
 

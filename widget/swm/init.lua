@@ -1216,7 +1216,7 @@ M.autoThrow = function(_, event, application)
       return
       -- elseif event == hs.application.watcher.activated then
    end
-   M.tile(1)
+   M.tile(0.2)
 end
 
 -- mostly for debugging
