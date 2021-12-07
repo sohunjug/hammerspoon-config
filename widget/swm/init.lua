@@ -865,11 +865,18 @@ M.recache = function()
       if not app then
          return
       end
-      local name = app:name()
 
-      if hs.fnutils.find(M.ignore, function(name)
-         return win:application():name() == name
-      end) then
+      if
+         hs.fnutils.find(M.ignore, function(name)
+            if not win then
+               return false
+            end
+            if not win:application() then
+               return false
+            end
+            return win:application():name() == name
+         end)
+      then
          return
       end
 
@@ -1216,7 +1223,7 @@ M.autoThrow = function(_, event, application)
       return
       -- elseif event == hs.application.watcher.activated then
    end
-   M.tile(0.2)
+   M.tile(0.4)
 end
 
 -- mostly for debugging
