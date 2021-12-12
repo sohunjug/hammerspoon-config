@@ -119,6 +119,7 @@ module.start = function(config)
       { key = "x", fn = hs.fnutils.partial(wm.switcherLayout, "main-left") },
       { key = ";", fn = hs.fnutils.partial(wm.switcherLayout, "gp-vertical") },
       { key = "l", fn = hs.fnutils.partial(wm.switcherLayout, "main-work") },
+      { key = "f", fn = hs.fnutils.partial(wm.switcherLayout, "floating") },
       { key = "h", fn = hs.fnutils.partial(wm.switcherLayout, "tabbed-left") },
       { key = "k", fn = hs.fnutils.partial(wm.switcherLayout, "half-left") },
       { key = "j", fn = hs.fnutils.partial(wm.switcherLayout, "monocle") },
