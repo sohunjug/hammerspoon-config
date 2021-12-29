@@ -871,10 +871,11 @@ M.recache = function()
             if not win then
                return false
             end
-            if not win:application() then
+            local _app = win:application()
+            if not _app then
                return false
             end
-            return win:application():name() == name
+            return _app:name() == name
          end)
       then
          return
@@ -882,7 +883,14 @@ M.recache = function()
 
       if
          hs.fnutils.find(M.ignore, function(bundleID)
-            return win:application():bundleID() == bundleID
+            if not win then
+               return false
+            end
+            local _app = win:application()
+            if not _app then
+               return false
+            end
+            return _app:bundleID() == bundleID
          end)
       then
          return
@@ -1172,7 +1180,12 @@ M.detectSpace = function(win)
 
    if M.filters then
       local foundMatch = hs.fnutils.find(M.filters, function(obj)
-         local appMatches = ternary(obj.app ~= nil and app ~= nil, string.match(app, obj.app or ""), true)
+         local match = string.match(app, obj.app or "")
+         if obj.eq then
+            match = app == obj.app
+         end
+         -- local appMatches = ternary(obj.app ~= nil and app ~= nil, string.match(app, obj.app or ""), true)
+         local appMatches = ternary(obj.app ~= nil and app ~= nil, match, true)
          local bundleMatches = false
          if bundle then
             bundleMatches = ternary(obj.bundle ~= nil and bundle ~= nil, string.match(bundle, obj.bundle or ""), true)

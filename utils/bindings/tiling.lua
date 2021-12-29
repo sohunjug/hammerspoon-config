@@ -247,7 +247,7 @@ module.start = function()
          if cache.timer then
             cache.timer:stop()
          end
-         cache.timer = hs.timer.doAfter(5, tfn)
+         cache.timer = hs.timer.doAfter(30, tfn)
          cache.timer:start()
       end
 

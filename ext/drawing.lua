@@ -69,7 +69,8 @@ module.drawBorder = function()
    end
 
    if isFullScreen then
-      cache.borderCanvas:frame(frame)
+      return
+      -- cache.borderCanvas:frame(frame)
    else
       cache.borderCanvas:frame {
          x = frame.x - distance / 2,
