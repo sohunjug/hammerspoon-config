@@ -120,7 +120,7 @@ module.start = function(_)
       { app = "同花顺至尊版", tile = false, screen = "primary", space = 2 },
       { app = "同花顺HD", tile = false, screen = "primary", space = 2 },
       -- { app = "东方财富", tile = true, screen = "primary", space = 5 },
-      { bundle = "com.easymoney.ipad", tile = false, screen = "primary", space = 2 },
+      { bundle = "com.eastmoney.ipad", tile = false, screen = "primary", space = 2 },
       { app = "iTunes", title = "Mini Player", tile = false },
       { app = "iTunes", title = "Multiple Song Info", tile = false },
       { app = "iTunes", title = "Song Info", tile = false },
