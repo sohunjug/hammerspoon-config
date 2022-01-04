@@ -129,6 +129,7 @@ module.start = function(_)
       { app = "钉钉", title = "钉钉", tile = true },
       { app = "钉钉", title = "Window", role = "AXWindow", subrole = "AXStandardWindow", tile = false },
       { app = "微信", title = "聊天", role = "AXWindow", subrole = "AXStandardWindow", tile = true },
+      { app = "企业微信", role = "AXWindow", subrole = "AXStandardWindow", eq = true, tile = true },
       { app = "微信", role = "AXWindow", subrole = "AXStandardWindow", tile = false, eq = true },
       { app = "odonate-desktop", tile = true, screen = "laptop", space = 1 },
       { title = "GVim", tile = true },
