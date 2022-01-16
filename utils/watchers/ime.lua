@@ -44,6 +44,7 @@ M.app2Ime = {
    ["/Applications/Safari.app"] = Chinese(),
    ["/Applications/wechatwebdevtools.app"] = English(),
    ["/Applications/Sketch.app"] = English(),
+   ["/Applications/uTools.app"] = English(),
 }
 
 M.app2flag = {}

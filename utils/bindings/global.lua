@@ -94,7 +94,6 @@ local function showavailableHotkey()
 end ]]
 
 module.start = function(config)
-   -- hs.application.enableSpotlightForNameSearches(true)
    -- ultra bindings
    local ultra = { "ctrl", "alt", "cmd" }
 

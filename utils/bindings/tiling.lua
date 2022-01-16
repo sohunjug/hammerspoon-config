@@ -257,8 +257,9 @@ module.start = function()
          local ID = spaces.activeSpace()
 
          if ID ~= spaceID and spaceID ~= nil then
-            spaces.changeToSpace(spaceID, false)
-            timerReload()
+            -- spaces.changeToSpace(spaceID, false)
+            hs.spaces.gotoSpace(spaceID)
+            -- timerReload()
          end
          -- hs.window.filter.switchedToSpace(idx)
       end)
@@ -285,12 +286,14 @@ module.start = function()
             return
          end
          -- local isFloating = hhtwm.isFloating(win)
-         local success = hhtwm.throwToSpace(win, spaceID)
+         -- local success = hhtwm.throwToSpace(win, spaceID)
+         local success = hs.spaces.moveWindowToSpace(win, spaceID)
 
          -- if window switched space, then follow it (ctrl + 0..9) and focus
          if success then
-            spaces.changeToSpace(spaceID, false)
-            timerReload()
+            hs.spaces.gotoSpace(spaceID)
+            -- spaces.changeToSpace(spaceID, false)
+            -- timerReload()
             -- hs.eventtap.keyStroke({ "ctrl" }, idx)
 
             -- retile and re-highlight window after we switch space
