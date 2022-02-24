@@ -124,11 +124,13 @@ local SKIP_BUNDLES = {
    ["cn.com.10jqka.iHexinFee"] = true,
    ["com.mschrage.fig"] = true,
    ["com.sudo-prompt"] = true,
+   ["com.microsoft.autoupdate.fba"] = true,
    -- ["N/A"] = true,
 }
 
 local SKIP_APPS = {
    ["imklaunchagent"] = true,
+   ["Microsoft Update Assistant"] = true,
    ["fig"] = true,
 }
 
@@ -1229,7 +1231,8 @@ M.autoThrow = function(_, event, application)
             if screen:name() ~= win:screen():name() then
                spaces.moveWindowToSpace()
             end ]]
-            M.throwToSpaceIdx(win, screenIdx, spaceIdx)
+            hs.spaces.moveWindowToSpace(win, spaceIdx)
+            -- M.throwToSpaceIdx(win, screenIdx, spaceIdx)
          end
       end
       M.tile()

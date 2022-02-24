@@ -3,26 +3,34 @@ local module = { cache = cache }
 
 local IMAGE_PATH = os.getenv "HOME" .. "/.hammerspoon/assets/airport.png"
 
-local notifyWifi = function(_, _, _, prevNetwork, network)
-   local subTitle = network and "Network: " .. network or "Disconnected"
+local notifyWifi = function()
+  local net = hs.wifi.currentNetwork()
 
-   if prevNetwork ~= network then
-      hs.notify.new({
-         title = "Wi-Fi Status",
-         subTitle = subTitle,
-         contentImage = IMAGE_PATH,
-         autoWithdraw = true,
-         withdrawAfter = 2,
-      }):send()
-   end
+  if hs.fnutils.contains(S_HS_CONFIG.network.work.wifi, net) then
+    hs.task.new(
+      "/usr/bin/sudo",
+      nil,
+      { os.getenv "HOME" .. "/.local/bin/" .. "work.sh" }
+    ):start()
+    print("work")
+  else
+    hs.task.new(
+      "/usr/bin/sudo",
+      nil,
+      { os.getenv "HOME" .. "/.local/bin/" .. "home.sh" }
+    ):start()
+    print("home")
+  end
+
 end
 
 module.start = function()
-   cache.watcher = hs.watchable.watch("status.currentNetwork", notifyWifi)
+  cache.watcher = hs.wifi.watcher.new(notifyWifi)
+  cache.watcher:start()
 end
 
 module.stop = function()
-   cache.watcher:release()
+   cache.watcher:stop()
 end
 
 return module

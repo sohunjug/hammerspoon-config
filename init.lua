@@ -28,14 +28,14 @@ hs.application.enableSpotlightForNameSearches(true)
 -- lower logging level for hotkeys
 require("hs.hotkey").setLogLevel "warning"
 
-local modules = { "bindings", "controlplane", "watchables", "watchers", "wm", "menubar" }
+local modules = { "bindings", "controlplane", "watchables", "watchers", "wm", "menubar", "notify" }
 -- global config
 _G.S_HS_CONFIG = {
    airpods = "sohunjug's AirPods",
    apps = {
       terms = { "Kitty", "iTerm2", "Termianl", "终端" },
-      nvim = { "Alacritty" },
-      browsers = { "Google Chrome", "Google Chrome Canary", "Safari" },
+      nvim = { "Alacritty", "Vimr" },
+      browsers = { "Google Chrome", "Google Chrome Canary", "Safari", "Microsoft Edge" },
    },
 
    wm = {
@@ -86,6 +86,9 @@ end)
 -- controlplane
 config.controlplane.enabled = {}
 
+config.notify.enabled = {
+   "wifi",
+}
 -- watchers
 config.watchers.enabled = {
    -- "power",
@@ -96,7 +99,7 @@ config.watchers.enabled = {
    "autoborder",
 }
 
-if hs.host.localizedName() == "sohunjug-MacBookAir" then
+if hs.host.localizedName() == "sohunjug-MacBookPro" then
    table.insert(config.watchers.enabled, "urlevent")
 end
 

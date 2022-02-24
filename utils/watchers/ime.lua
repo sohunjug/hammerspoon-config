@@ -105,15 +105,32 @@ local function applicationWatcher(_, eventType, _)
    end
 end
 
+local function windowWatcher()
+   updateFocusAppInputMethod()
+end
 M.appWatcher = hs.application.watcher.new(applicationWatcher)
 
 function M.start()
    M.appWatcher:start()
+   M.filter = hs.window.filter.new():setCurrentSpace(true):setDefaultFilter():setOverrideFilter {
+      fullscreen = false,
+      allowRoles = { "AXStandardWindow" },
+   }
+
+   M.filter:subscribe({
+      hs.window.filter.windowCreated,
+      hs.window.filter.windowDestroyed,
+      hs.window.filter.windowsChanged,
+      hs.window.filter.windowMoved,
+      hs.window.filter.windowFocused,
+      hs.window.filter.windowUnfocused,
+   }, windowWatcher)
    hs.hotkey.bind({ "ctrl", "alt", "cmd" }, "i", M.echoInfo)
 end
 
 function M.stop()
    M.appWatcher:stop()
+   M.filter:unsubscribeAll()
 end
 
 return M
