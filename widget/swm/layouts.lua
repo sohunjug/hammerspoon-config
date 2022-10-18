@@ -67,6 +67,40 @@ return function(swm)
       return frame
    end
 
+   layouts["half-right"] = function(window, windows, screen, index, layoutOptions)
+      if #windows == 1 then
+         return layouts["monocle"](window, windows, screen)
+      end
+
+      local margin = swm.margin or 0
+      local insetFrame = getInsetFrame(screen)
+
+      -- print(layoutOptions.mainPaneRatio)
+      local frame = {
+         x = insetFrame.x,
+         y = insetFrame.y,
+         w = 0,
+         h = 0,
+      }
+
+      if index == 1 then
+         frame.x = frame.x + insetFrame.w * layoutOptions.mainPaneRatio + margin / 2
+         frame.y = frame.y + margin / 2
+         frame.h = insetFrame.h - margin
+         frame.w = insetFrame.w * layoutOptions.mainPaneRatio - margin
+      else
+         local divs = #windows - 1
+         local h = insetFrame.h / divs
+
+         frame.h = h - margin
+         frame.w = insetFrame.w * (1 - layoutOptions.mainPaneRatio) - margin
+         frame.x = frame.x + margin / 2
+         frame.y = frame.y + h * (index - 2) + margin / 2
+      end
+
+      return frame
+   end
+
    layouts["main-right"] = function(window, windows, screen, index, layoutOptions)
       if #windows == 1 then
          return layouts["monocle"](window, windows, screen)
@@ -219,6 +253,39 @@ return function(swm)
       }
 
       if index == 1 then
+         frame.x = frame.x + margin / 2
+         frame.y = frame.y + margin / 2
+         frame.w = insetFrame.w * layoutOptions.mainPaneRatio - margin
+         frame.h = insetFrame.h - margin
+      else
+         frame.x = frame.x + insetFrame.w * layoutOptions.mainPaneRatio + margin / 2
+         frame.y = frame.y + margin / 2
+         frame.w = insetFrame.w * (1 - layoutOptions.mainPaneRatio) - margin
+         frame.h = insetFrame.h - margin
+      end
+      return frame
+   end
+
+   layouts["right-work"] = function(window, windows, screen, index, layoutOptions)
+      if #windows == 1 then
+         return layouts["monocle"](window, windows, screen)
+      end
+
+      local margin = swm.margin or 0
+      local insetFrame = getInsetFrame(screen)
+
+      if layoutOptions.mainPaneRatio <= 0.45 then
+         layoutOptions.mainPaneRatio = 0.56
+      end
+
+      local frame = {
+         x = insetFrame.x,
+         y = insetFrame.y,
+         w = 0,
+         h = 0,
+      }
+
+      if index ~= 1 then
          frame.x = frame.x + margin / 2
          frame.y = frame.y + margin / 2
          frame.w = insetFrame.w * layoutOptions.mainPaneRatio - margin

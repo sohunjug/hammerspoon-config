@@ -29,6 +29,7 @@ M.app2Ime = {
    ["/Applications/NeteaseMusic.app"] = Chinese(),
    ["/Applications/Telegram Desktop.app"] = Chinese(),
    ["/Applications/微信.app"] = Chinese(),
+   ["/Applications/企业微信.app"] = Chinese(),
    ["/Applications/钉钉.app"] = Chinese(),
    ["/Applications/WeChat.app"] = Chinese(),
    ["/Applications/Microsoft Edge.app"] = Chinese(),

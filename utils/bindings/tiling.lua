@@ -238,7 +238,7 @@ module.start = function()
    for n = 1, 9 do
       local idx = tostring(n)
 
-      local tfn = function()
+      --[[local function tfn()
          hs.execute "killall Dock"
          cache.timer = nil
       end
@@ -249,7 +249,7 @@ module.start = function()
          end
          cache.timer = hs.timer.doAfter(30, tfn)
          cache.timer:start()
-      end
+      end]]
 
       hs.hotkey.bind({ "shift", "alt" }, idx, nil, function()
          local uuid = hs.screen.mainScreen():spacesUUID()

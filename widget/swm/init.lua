@@ -105,6 +105,9 @@ local getSpaceIndex = function(win)
    local uuid = win:screen():spacesUUID()
    local spaceIds = spaces.layout()[uuid]
    local spaceId = M.getSpaceId(win)
+   if spaceIds == nil then
+      return nil
+   end
    for idx, id in ipairs(spaceIds) do
       if id == spaceId then
          return idx
@@ -122,15 +125,28 @@ local SKIP_BUNDLES = {
    ["com.adobe.csi.CS5.5ServiceManager"] = true,
    ["com.mcafee.McAfeeReporter"] = true,
    ["cn.com.10jqka.iHexinFee"] = true,
+   ["com.tencent.LemonMonitor"] = true,
    ["com.mschrage.fig"] = true,
    ["com.sudo-prompt"] = true,
    ["com.microsoft.autoupdate.fba"] = true,
+   ["com.bjango.istatmenus.status"] = true,
+   ["com.apple.notificationcenterui"] = true,
+   ["com.apple.loginwindow"] = true,
+   ["com.apple.systempreferences"] = true,
+   ["com.tencent.wwmapp"] = true,
+   ["com.youqu.todesk.mac"] = true,
+   ["com.apple.quicklook.QuickLookUIService"] = true,
+   ["com.apple.Family"] = true,
+   ["com.apple.storeuid"] = true,
+   ["cn.better365.ishot"] = true,
    -- ["N/A"] = true,
 }
 
 local SKIP_APPS = {
+   ["LemonMonitor"] = true,
    ["imklaunchagent"] = true,
    ["Microsoft Update Assistant"] = true,
+   ["企业微信 Node"] = true,
    ["fig"] = true,
 }
 
@@ -271,6 +287,9 @@ M.findTrackedWindow = function(winOrWinId)
 
       local _screenIdx = getScreenIndex(win:screen())
       local _spaceIdx = getSpaceIndex(win)
+      if _spaceIdx == nil then
+         return
+      end
       ensureCacheSpaces(_screenIdx, _spaceIdx)
 
       for screenIdx, spaceIds in pairs(cache.spaces) do
@@ -914,6 +933,9 @@ M.recache = function()
       local _screenIdx = getScreenIndex(win:screen())
       local _spaceIdx = getSpaceIndex(win)
       local tmp = ensureCacheSpaces(_screenIdx, _spaceIdx)
+      if tmp == nil then
+         return
+      end
       local trackedWinId, trackedSpaceIdx, trackedWinIdx, trackedScreenIdx = M.findTrackedWindow(win)
 
       if win:id() == cache.main[_screenIdx][_spaceIdx] then
@@ -984,7 +1006,7 @@ M.tile = function(sec)
       return
    end
    if not sec then
-      sec = 0.05
+      sec = 0.01
    end
    cache.timer = --hs.timer.doAfter(1.3, M.tiling)
       hs.timer.delayed.new(sec, M.tiling)
@@ -1343,7 +1365,7 @@ M.start = function()
 
    M.screenWatcher = hs.screen.watcher.newWithActiveScreen(hs.fnutils.partial(M.tile, 1))
 
-   cache.appWatcher = hs.application.watcher.new(M.autoThrow)
+   -- cache.appWatcher = hs.application.watcher.new(M.autoThrow)
 
    -- cache.spaceWatcher = hs.spaces.watcher.new(M.tile)
 
@@ -1353,7 +1375,7 @@ M.start = function()
 
    M.screenWatcher:start()
 
-   cache.appWatcher:start()
+   -- cache.appWatcher:start()
 
    M.tile()
 end
@@ -1369,7 +1391,7 @@ M.stop = function()
 
    -- cache.spaceWatcher:stop()
 
-   cache.appWatcher:stop()
+   -- cache.appWatcher:stop()
 end
 
 return M

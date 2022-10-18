@@ -1,6 +1,7 @@
 -- global stuff
 require("console").init()
 require("overrides").init()
+-- require("stackline"):init()
 
 -- ensure IPC is there
 hs.ipc.cliInstall()
@@ -28,13 +29,14 @@ hs.application.enableSpotlightForNameSearches(true)
 -- lower logging level for hotkeys
 require("hs.hotkey").setLogLevel "warning"
 
-local modules = { "bindings", "controlplane", "watchables", "watchers", "wm", "menubar", "notify" }
+local modules = { "bindings", "controlplane", "watchables", "wm", "watchers", "menubar", "notify" }
 -- global config
 _G.S_HS_CONFIG = {
-   airpods = "sohunjug's AirPods",
+   -- airpods = "sohunjug's AirPods",
+   airpods = "9c-fc-28-13-0c-79",
    apps = {
-      terms = { "Kitty", "iTerm2", "Termianl", "终端" },
-      nvim = { "Alacritty", "Vimr" },
+      terms = { "Kitty", "iTerm2", "Termianl", "终端", "WezTerm" },
+      nvim = { "Alacritty", "VimR" },
       browsers = { "Google Chrome", "Google Chrome Canary", "Safari", "Microsoft Edge" },
    },
 
@@ -87,7 +89,7 @@ end)
 config.controlplane.enabled = {}
 
 config.notify.enabled = {
-   "wifi",
+   -- "wifi",
 }
 -- watchers
 config.watchers.enabled = {
@@ -96,12 +98,12 @@ config.watchers.enabled = {
    -- "message",
    -- "network",
    "ime",
-   "autoborder",
+   -- "autoborder",
 }
 
-if hs.host.localizedName() == "sohunjug-MacBookPro" then
+--[[ if hs.host.localizedName() == "sohunjug-MacBookPro" then
    table.insert(config.watchers.enabled, "urlevent")
-end
+end ]]
 
 config.menubar.enabled = { "space" }
 -- config.watchers.enabled = {}
