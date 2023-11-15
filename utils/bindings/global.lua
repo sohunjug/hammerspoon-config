@@ -110,7 +110,7 @@ module.start = function(config)
       { key = "/", fn = system.toggleConsole },
       { key = "b", fn = system.toggleBluetooth },
       { key = "d", fn = hs.fnutils.partial(hs.execute, "killall Dock") },
-      { key = "a", fn = hs.fnutils.partial(airpods.connect, S_HS_CONFIG.airpods) },
+      -- { key = "a", fn = hs.fnutils.partial(airpods.connect, S_HS_CONFIG.airpods) },
       { key = "g", fn = grid.toggleGrid },
       { key = "c", fn = wm.cycleLayout },
       { key = "-", fn = hs.fnutils.partial(wm.cache.hhtwm.resizeLayout, "thinner") },

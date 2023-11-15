@@ -181,7 +181,7 @@ module.start = function()
    -- [r]eset
    bind("r", hhtwm.reset)
 
-   bind("n", function()
+   local fn = function()
       spaces.createSpace(hs.window.frontmostWindow():screen():getUUID(), true)
       -- spaces.createSpace(nil, true)
       print(
@@ -190,7 +190,8 @@ module.start = function()
          spaces.mainScreenUUID()
       )
       -- spaces.createSpace(spaces.spaceScreenUUID(spaces.currentSpace()), false)
-   end)
+   end
+   hs.hotkey.bind({ "ctrl", "shift", "command" }, "n", fn, nil, fn)
 
    -- re[t]ile
    bind("t", hhtwm.tile)

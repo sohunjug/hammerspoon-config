@@ -58,9 +58,10 @@ module.drawBorder = function()
    local frame = focusedWindow:frame()
 
    if not cache.borderCanvas then
-      cache.borderCanvas = hs.canvas.new({ x = 0, y = 0, w = 0, h = 0 })
+      cache.borderCanvas = hs
+         .canvas
+         .new({ x = 0, y = 0, w = 0, h = 0 })
          :level(hs.canvas.windowLevels.normal) -- :level(hs.canvas.windowLevels.overlay)
-
          :behavior({
             hs.canvas.windowBehaviors.transient,
             hs.canvas.windowBehaviors.moveToActiveSpace,
@@ -92,9 +93,9 @@ module.drawBorder = function()
 end
 
 module.highlightWindow = function(win)
-   if S_HS_CONFIG.window.highlightBorder then
+   --[[ if S_HS_CONFIG.window.highlightBorder then
       module.drawBorder()
-   end
+   end ]]
 
    if S_HS_CONFIG.window.highlightMouse then
       local focusedWindow = win or hs.window.focusedWindow()
