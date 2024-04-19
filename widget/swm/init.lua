@@ -137,6 +137,7 @@ local SKIP_BUNDLES = {
   ["com.youqu.todesk.mac"] = true,
   ["com.apple.quicklook.QuickLookUIService"] = true,
   ["com.apple.Family"] = true,
+  ["com.surteesstudios.Bartender"] = true,
   ["com.apple.storeuid"] = true,
   ["cn.better365.ishot"] = true,
   ["dev.kdrag0n.MacVirt"] = true,

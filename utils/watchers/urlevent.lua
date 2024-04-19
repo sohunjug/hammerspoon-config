@@ -57,7 +57,8 @@ module.start = function(_)
       elseif isAtWork and handler ~= S_HS_CONFIG.network.work.browser then
          hs.urlevent.openURLWithBundle(fullURL, S_HS_CONFIG.network.work.browser)
       elseif not isAtWork and not isAtHome then
-         hs.urlevent.openURLWithBundle(fullURL, "com.apple.Safari")
+         hs.urlevent.openURLWithBundle(fullURL, S_HS_CONFIG.network.home.browser)
+         -- hs.urlevent.openURLWithBundle(fullURL, "com.apple.Safari")
       end
       -- focus back the current app
       -- if not shouldFocusBrowser and not currentApp:isFrontmost() then

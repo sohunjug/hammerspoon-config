@@ -3,6 +3,7 @@ local M = { cache = cache }
 
 local function Chinese()
    return "com.sogou.inputmethod.sogou.pinyin"
+   -- return "com.tencent.inputmethod.wetype.pinyin"
    -- hs.keycodes.currentSourceID("com.sogou.inputmethod.sogou.pinyin")
    -- hs.keycodes.currentSourceID("im.rime.inputmethod.Squirrel.Rime")
    -- hs.keycodes.currentSourceID("com.apple.inputmethod.SCIM.ITABC")

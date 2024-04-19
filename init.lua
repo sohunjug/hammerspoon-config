@@ -33,7 +33,8 @@ local modules = { "bindings", "controlplane", "watchables", "wm", "watchers", "m
 -- global config
 _G.S_HS_CONFIG = {
   -- airpods = "sohunjug's AirPods",
-  airpods = "7c-c1-80-1c-f8-d3",
+  -- airpods = "7c-c1-80-1c-f8-d3",
+  airpods = "14-87-6a-30-32-a6",
   apps = {
     terms = { "Kitty", "iTerm2", "Termianl", "终端", "WezTerm" },
     nvim = { "Alacritty", "VimR" },
@@ -65,11 +66,13 @@ _G.S_HS_CONFIG = {
   network = {
     home = {
       wifi = { "Ting", "sohunjug-wifi", "sohunjug", "T" },
-      browser = "com.google.Chrome.canary",
+      -- browser = "com.google.Chrome.canary",
+      browser = "com.google.Chrome",
     },
     work = {
       wifi = { "kayakwise_5G", "kayakwise" },
-      browser = "com.google.Chrome",
+      -- browser = "com.google.Chrome",
+      browser = "com.Microsoft.Edge",
     },
   },
 
@@ -99,6 +102,7 @@ config.watchers.enabled = {
   -- "network",
   "ime",
   -- "autoborder",
+  -- "urlevent",
 }
 
 --[[ if hs.host.localizedName() == "sohunjug-MacBookPro" then
