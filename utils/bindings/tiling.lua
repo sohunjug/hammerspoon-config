@@ -1,5 +1,5 @@
 local highlightWindow = require("ext.drawing").highlightWindow
-local spaces = require "hs._asm.undocumented.spaces"
+-- local spaces = require "hs._asm.undocumented.spaces"
 local capitalize = require("ext.utils").capitalize
 local wm = require "utils.wm"
 
@@ -182,13 +182,14 @@ module.start = function()
    bind("r", hhtwm.reset)
 
    local fn = function()
-      spaces.createSpace(hs.window.frontmostWindow():screen():getUUID(), true)
+      -- spaces.createSpace(hs.window.frontmostWindow():screen():getUUID(), true)
+      hs.spaces.addSpaceToScreen(hs.window.frontmostWindow():screen():getUUID())
       -- spaces.createSpace(nil, true)
-      print(
-         spaces.spaceScreenUUID(spaces.currentSpace()),
-         hs.window.frontmostWindow():screen():getUUID(),
-         spaces.mainScreenUUID()
-      )
+      -- print(
+      --    spaces.spaceScreenUUID(spaces.currentSpace()),
+      --    hs.window.frontmostWindow():screen():getUUID(),
+      --    spaces.mainScreenUUID()
+      -- )
       -- spaces.createSpace(spaces.spaceScreenUUID(spaces.currentSpace()), false)
    end
    hs.hotkey.bind({ "ctrl", "shift", "command" }, "n", fn, nil, fn)
@@ -254,8 +255,9 @@ module.start = function()
 
       hs.hotkey.bind({ "shift", "alt" }, idx, nil, function()
          local uuid = hs.screen.mainScreen():spacesUUID()
-         local spaceID = spaces.layout()[uuid][n]
-         local ID = spaces.activeSpace()
+         local spaceID = hs.spaces.spacesForScreen(uuid)[n]
+         -- local ID = spaces.activeSpace()
+         local ID = hs.spaces.focusedSpace()
 
          if ID ~= spaceID and spaceID ~= nil then
             -- spaces.changeToSpace(spaceID, false)
@@ -268,11 +270,13 @@ module.start = function()
       hs.hotkey.bind({ "ctrl", "alt", "shift" }, idx, nil, function()
          local win = hs.window.focusedWindow()
          local uuid = win:screen():spacesUUID()
-         local spaceID = spaces.layout()[uuid][n]
-         local ID = spaces.activeSpace()
+         -- local spaceID = spaces.layout()[uuid][n]
+         -- local ID = spaces.activeSpace()
+         local spaceID = hs.spaces.spacesForScreen(uuid)[n]
+         local ID = hs.spaces.focusedSpace()
 
          if ID ~= spaceID and spaceID ~= nil then
-            spaces.removeSpace(spaceID, true)
+            hs.spaces.removeSpace(spaceID, true)
          end
          -- hs.window.filter.switchedToSpace(idx)
       end)
@@ -280,19 +284,24 @@ module.start = function()
       hs.hotkey.bind({ "ctrl", "shift" }, idx, nil, function()
          local win = hs.window.focusedWindow()
          local uuid = win:screen():spacesUUID()
-         local spaceID = spaces.layout()[uuid][n]
 
-         local ID = spaces.activeSpace()
-         if ID == spaceID or spaceID == nil then
+         -- local spaceID = spaces.layout()[uuid][n]
+         -- local ID = spaces.activeSpace()
+
+         local spaceID = hs.spaces.spacesForScreen(uuid)
+         local ID = hs.spaces.focusedSpace()
+
+         if ID == spaceID[n] or spaceID == nil then
             return
          end
+         -- print(hs.inspect(spaceID), "idx:", idx, "spaceID:", spaceID[tonumber(idx)])
          -- local isFloating = hhtwm.isFloating(win)
          -- local success = hhtwm.throwToSpace(win, spaceID)
-         local success = hs.spaces.moveWindowToSpace(win, spaceID)
+         local success = hs.spaces.moveWindowToSpace(win, spaceID[n])
 
          -- if window switched space, then follow it (ctrl + 0..9) and focus
          if success then
-            hs.spaces.gotoSpace(spaceID)
+            hs.spaces.gotoSpace(spaceID[n])
             -- spaces.changeToSpace(spaceID, false)
             -- timerReload()
             -- hs.eventtap.keyStroke({ "ctrl" }, idx)
